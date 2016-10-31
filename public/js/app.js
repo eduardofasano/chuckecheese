@@ -25,8 +25,8 @@ $(function () {
     });
   });
 
+  //POPULATE MAP
   var getEvents = $.get('http://eonet.sci.gsfc.nasa.gov/api/v2/events').done(function (data) {
-    console.log(data);
     data.events.forEach(function (disaster) {
       if (disaster.geometries[0].coordinates[0] instanceof Array) {
         (function () {
@@ -40,6 +40,7 @@ $(function () {
             radius: 500000,
             fillColor: '#ff00ff'
           });
+          addInfoWindowForDisaster(disaster, circle);
         })();
       } else {
         var _circle = new google.maps.Circle({
@@ -48,19 +49,21 @@ $(function () {
           radius: 500000,
           fillColor: '#ff00ff'
         });
+        addInfoWindowForDisaster(disaster, _circle);
       }
     });
   });
 
-  // //RECTANGLE FUNCTIONALITY
-  // let rectangle = new google.maps.Rectangle({
-  //   strokeColor: '#FF0000',
-  //   strokeOpacity: 0.8,
-  //   strokeWeight: 2,
-  //   fillColor: '#ffffff',
-  //   fillOpacity: 0.35,
-  //   map: map,
-  //   bounds: bounds
-  // });
-
+  //ADD INFO WINDOW
+  function addInfoWindowForDisaster(disaster, circle) {
+    google.maps.event.addListener(circle, "click", function () {
+      console.log(circle);
+      console.log(disaster);
+      var infoWindow = new google.maps.InfoWindow({
+        content: '\n      <h2>' + disaster.title + '</h2>',
+        position: circle.center
+      });
+      infoWindow.open(map, circle);
+    });
+  }
 });
