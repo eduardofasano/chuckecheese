@@ -1,83 +1,70 @@
-var googleMap = googleMap || {};
+$(() => {
+  let $mapDiv = $('#map');
 
-googleMap.getRestaurants = function () {
-  $.get("http://localhost:3000/api/restaurants")
-  .done(this.loopThroughRestaurants);
-};
-
-googleMap.loopThroughRestaurants = (data) => {
-  data.restaurants.forEach((restaurant) => { //what is this?
-    googleMap.createMarkerForRestaurant(restaurant);
+  let map = new google.maps.Map($mapDiv[0], {
+    center: { lat: 42.77509, lng: 13.01239 },
+    zoom: 4
   });
-};
 
-googleMap.createMarkerForRestaurant = (restaurant) => {
-  let latLng = new google.maps.LatLng(restaurant.lat, restaurant.lng);
-  let marker = new google.maps.Marker({
-    position: latLng,
-    map: googleMap.map
-  });
-  googleMap.addInfoWindowForRestaurant(restaurant, marker);
-};
-
-googleMap.addInfoWindowForRestaurant = function(restaurant, marker) {
-  google.maps.event.addListener(marker, "click", () => { //why do we need the marker; is this event delegation?
-    if (this.infoWindow) {
-      this.infoWindow.close();
-    }
-    googleMap.infoWindow = new google.maps.InfoWindow({
-      content: `<h2>${restaurant.name}</h2>
-                <p>${restaurant.description}</p>
-                <img src='${restaurant.image}'</>`
-    });
-    this.infoWindow.open(this.map, marker);
-  });
-};
-
-googleMap.initEventHandlers = function() {
-  let $newForm = $('.new');
-  $newForm.on('submit', (e) => {
-     e.preventDefault();
-     console.log("Working");
-     let data = $newForm.serialize();
-     $.ajax({
-       url: '/api/restaurants/',
-       method: "POST",
-       data
-     }).done((data) => {
-       googleMap.createMarkerForRestaurant(data.restaurant);
-     });
-   });
-};
-
-googleMap.showPosition = function () {
+//CURRENT POSITION
   navigator.geolocation.getCurrentPosition((position) => {
-  let latLng =
-  { lat: position.coords.latitude,
-    lng: position.coords.longitude
-  };
-  this.map.panTo(latLng);
+    let latLng = {
+      lat: position.coords.latitude,
+      lng:position.coords.longitude
+    };
+    map.panTo(latLng);
+    //map.setZoom(5);
 
-  let marker = new google.maps.Marker({
-    icon: './images/marker.png',
-    position: latLng,
-    animation: google.maps.Animation.DROP,
-    draggable: true,
-    map: this.map
+    let maker = new google.maps.Marker({
+      position: latLng,
+      animation: google.maps.Animation.DROP,
+      draggable: true,
+      map
+    });
   });
+
+  let getEvents = $.get('http://eonet.sci.gsfc.nasa.gov/api/v2/events')
+  .done(function(data) {
+    console.log(data);
+    data.events.forEach((disaster) => {
+      if(disaster.geometries[0].coordinates[0] instanceof Array) {
+        let bounds = new google.maps.LatLngBounds();
+        disaster.geometries[0].coordinates.forEach((coords) => {
+          bounds.extend(new google.maps.LatLng(coords[1], coords[0]));
+        });
+        let circle = new google.maps.Circle({
+          center: bounds.getCenter(),
+          map: map,
+          radius: 500000,
+          fillColor: '#ff00ff'
+        });
+      } else {
+        let circle = new google.maps.Circle({
+          center: new google.maps.LatLng(disaster.geometries[0].coordinates[1], disaster.geometries[0].coordinates[0]),
+          map: map,
+          radius: 500000,
+          fillColor: '#ff00ff'
+        });
+      }
+    });
 });
-};
 
-googleMap.mapSetup = function() {
-  let canvas = document.getElementById("mapCanvas");
-  let mapOptions = {
-    zoom: 13,
-    center: new google.maps.LatLng(51.5, -0.08),
-  };
-  this.map = new google.maps.Map(canvas, mapOptions);  //where is the little "map" coming from?
-  this.getRestaurants();
-  this.initEventHandlers();
-  this.showPosition();
-};
+// //RECTANGLE FUNCTIONALITY
+// let rectangle = new google.maps.Rectangle({
+//   strokeColor: '#FF0000',
+//   strokeOpacity: 0.8,
+//   strokeWeight: 2,
+//   fillColor: '#ffffff',
+//   fillOpacity: 0.35,
+//   map: map,
+//   bounds: bounds
+// });
 
-$(googleMap.mapSetup.bind(googleMap)); //why do we need the jQuery coat here?
+
+
+
+
+
+
+
+});
