@@ -8,8 +8,7 @@ $(() => {
   });
 
   //CURRENT POSITION
-
-  navigator.geolocation.getCurrentPosition((position) => {
+  let currentPosition = navigator.geolocation.getCurrentPosition((position) => {
     let latLng = {
       lat: position.coords.latitude,
       lng:position.coords.longitude
@@ -162,23 +161,6 @@ $(() => {
         });
         circles = [];
       }
-
-      // //CURRENT POSITION
-      //   navigator.geolocation.getCurrentPosition((position) => {
-      //     let latLng = {
-      //       lat: position.coords.latitude,
-      //       lng:position.coords.longitude
-      //     };
-      //     map.panTo(latLng);
-      //     //map.setZoom(5);
-      //
-      //     let maker = new google.maps.Marker({
-      //       position: latLng,
-      //       animation: google.maps.Animation.DROP,
-      //       draggable: true,
-      //       map
-      //     });
-      //   });
 
 
       //ADD INFO WINDOW

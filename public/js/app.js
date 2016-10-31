@@ -10,8 +10,7 @@ $(function () {
   });
 
   //CURRENT POSITION
-
-  navigator.geolocation.getCurrentPosition(function (position) {
+  var currentPosition = navigator.geolocation.getCurrentPosition(function (position) {
     var latLng = {
       lat: position.coords.latitude,
       lng: position.coords.longitude
@@ -120,24 +119,6 @@ $(function () {
     });
     circles = [];
   }
-
-  // //CURRENT POSITION
-  //   navigator.geolocation.getCurrentPosition((position) => {
-  //     let latLng = {
-  //       lat: position.coords.latitude,
-  //       lng:position.coords.longitude
-  //     };
-  //     map.panTo(latLng);
-  //     //map.setZoom(5);
-  //
-  //     let maker = new google.maps.Marker({
-  //       position: latLng,
-  //       animation: google.maps.Animation.DROP,
-  //       draggable: true,
-  //       map
-  //     });
-  //   });
-
 
   //ADD INFO WINDOW
   function addInfoWindowForDisaster(disaster, circle) {
