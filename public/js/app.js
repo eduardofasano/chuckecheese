@@ -29,20 +29,23 @@ $(function () {
     });
   });
 
+  function goBack() {
+    resetMap();
+  }
+
   //RESET MAP
   function resetMap() {
-    infoWindow.close();
-    infoWindow;
     smoothZoomOut(map, 1, map.getZoom());
     populateMap();
-
-    // console.log(this);
-    // $(this).parent().innerHTML = null;
+    infoWindow.close();
+    infoWindow = undefined;
   }
 
   //POPULATE MAP
   function populateMap() {
+
     var getEvents = $.get('http://eonet.sci.gsfc.nasa.gov/api/v2/events').done(function (data) {
+
       data.events.forEach(function (disaster) {
         if (disaster.geometries[0].coordinates[0] instanceof Array) {
           (function () {
@@ -78,7 +81,7 @@ $(function () {
   var $container = $('#container');
   $container.on('submit', 'form', handleForm);
   $container.on('click', '#logOut', logout);
-  $mapDiv.on('click', '#goBack', resetMap);
+  $mapDiv.on('click', '#goBack', goBack);
 
   //CREATE FORM
   function isLoggedIn() {
@@ -147,7 +150,7 @@ $(function () {
     google.maps.event.addListener(circle, "click", function () {
       console.log(circle.category);
       infoWindow = new google.maps.InfoWindow({
-        content: '\n            <h2>' + disaster.title + '</h2>\n            <h4>' + disaster.geometries[0].date + '</h4>\n            <a href=' + disaster.sources[0].url + ' target="_blank">More Information</a>\n            <button id="goBack">Go Back</button>',
+        content: '\n            <h2>' + disaster.title + '</h2>\n            <h4>' + disaster.geometries[0].date + '</h4>\n            <a href="' + disaster.sources[0].url + '" target="_blank">More Information</a>\n            <button id="goBack">Go Back</button>',
         position: circle.center
       });
       map.setCenter(circle.center);
