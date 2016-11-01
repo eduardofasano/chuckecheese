@@ -5,6 +5,7 @@ $(function () {
   var $mapDiv = $('#map');
   var circles = [];
   var checkBoxesChecked = void 0;
+  var $sidebar = $('.sidebar');
 
   var map = new google.maps.Map($mapDiv[0], {
     center: { lat: 42.77509, lng: 13.01239 },
@@ -27,22 +28,6 @@ $(function () {
       map: map
     });
   });
-
-  // //CATEGORY ARRAY
-  // function createCategoryArray() {
-  //   console.log('inside createCategoryArray()');
-  //   let getCategories = $.get('http://eonet.sci.gsfc.nasa.gov/api/v2/categories')
-  //   .done(function(data) {
-  //     console.log("data ", data);
-  //     data.category.forEach((category) => {
-  //       categories.push(category);
-  //       console.log(categories);
-  //     });
-  //   })
-  //   .fail(function(data){
-  //     console.log('fail', data.responseText);
-  //   });
-  // }
 
   //POPULATE MAP
   function populateMap() {
@@ -91,14 +76,13 @@ $(function () {
   if (isLoggedIn()) {
     showFilterForm();
     populateMap();
-    createCategoryArray();
   } else {
     showLoginForm();
   }
 
   function showLoginForm() {
     if (event) event.preventDefault();
-    $container.html('\n      <div id="logInForm">\n      <form class="login" action="api/login" method="post" onchange="getCheckedBoxes()">\n      <label for="email"></label>\n      <input type="text" name="email" placeholder="email" value="">\n      <label for="password"></label>\n      <input type="password" name="password" placeholder="password" value="">\n      <input type="submit" name="Log in" value="Log in" class=\'button\'><br>\n      </form>\n      </div>\n      <br><br><br>\n      <div id="registerForm">\n      <form class="register" action="api/register" method="post">\n      <label for="username"></label>\n      <input type="text" name="username" placeholder="username" value="">\n      <label for="email"></label>\n      <input type="text" name="email" placeholder="email" value="">\n      <label for="password"></label>\n      <input type="password" name="password" placeholder="password" value="">\n      <label for="passwordConfirmation"></label>\n      <input type="password" name="passwordConfirmation" placeholder="password confirmation" value="">\n      <input type="submit" name="register" value="Register" class=\'button\'><br>\n      </form>\n      </div>\n      ');
+    $sidebar.html('\n      <div id="logInForm">\n      <form class="login" action="api/login" method="post" onchange="getCheckedBoxes()">\n      <label for="email"></label>\n      <input type="text" name="email" placeholder="email" value="">\n      <label for="password"></label>\n      <input type="password" name="password" placeholder="password" value="">\n      <input type="submit" name="Log in" value="Log in" class=\'button\'><br>\n      </form>\n      </div>\n\n      <div id="registerForm">\n      <form class="register" action="api/register" method="post">\n      <label for="username"></label>\n      <input type="text" name="username" placeholder="username" value="">\n      <label for="email"></label>\n      <input type="text" name="email" placeholder="email" value="">\n      <label for="password"></label>\n      <input type="password" name="password" placeholder="password" value="">\n      <label for="passwordConfirmation"></label>\n      <input type="password" name="passwordConfirmation" placeholder="password confirmation" value="">\n      <input type="submit" name="register" value="Register" class=\'button\'><br>\n      </form>\n      </div>\n      ');
   }
 
   function handleForm() {
@@ -123,13 +107,12 @@ $(function () {
       console.log('hello');
       showFilterForm();
       populateMap();
-      createCategoryArray();
     });
   }
 
   function showFilterForm() {
     if (event) event.preventDefault();
-    $container.html('\n        <form class="filter" action="#" method="get">\n        <input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought\n        <input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze\n        <input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires\n        <input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods\n        <input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms\n        <input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes\n        <input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color\n        <input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides\n        <input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice\n        <input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes\n        <input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow\n        <input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme\n        <input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade\n        <button>Filter</button>\n        <button id="logOut">Log Out</button>\n        </form>\n        ');
+    $sidebar.html('\n        <form class="filter" action="#" method="get">\n        <input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought\n        <input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze\n        <input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires\n        <input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods\n        <input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms\n        <input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes\n        <input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color\n        <input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides\n        <input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice\n        <input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes\n        <input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow\n        <input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme\n        <input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade\n        <button>Filter</button>\n        <button id="logOut">Log Out</button>\n        </form>\n        ');
     $("input").on("click", function () {
       var inputValue = this.value;
       console.log(inputValue);
