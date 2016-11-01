@@ -122,7 +122,7 @@ $(function () {
 
   function showTwitterForm() {
     if (event) event.preventDefault();
-    $sidebar.html('\n          <div class="tweetStream">Tweets Div\n            <ol class="tweetItems">\n            </ol>\n          </div>\n        ');
+    $sidebar.html('\n          <div class="tweetStream">Tweets Div\n            <ul class="tweetItems">\n            </ul>\n          </div>\n        ');
   }
 
   function logout() {
@@ -153,13 +153,15 @@ $(function () {
   }
 
   var $tweetStream = $('.tweetStream');
-  var $tweetItems = $('.tweetItems');
 
   function getTweets(title) {
     var tweets = $.get('http://localhost:8000/api/tweets?title=' + title).done(function (data) {
+      var $tweetItems = $('.tweetItems');
       data.statuses.forEach(function (tweet) {
         console.log(tweet);
-        $sidebar.append('<li>' + tweet.text + '</li>');
+        var itemHtml = '<li class="stream-item">' + '<div class="tweet">' + '<a href="#">' + '<img src="' + tweet.user.profile_image_url + '" alt="User image goes here.">' + '</a>' + '<div class="content">' + '<strong class="fullname">' + tweet.user.name + '</strong>' + '<span>&rlm;</span>' + '<span>@</span><b>' + tweet.user.screen_name + '</b>' + '&nbsp;&middot;&nbsp;' + '<small class="time">' + tweet.created_at + '</small>' + '<p>' + tweet.text + '</p>' + '</div>' + '</div>' + '</li>';
+        $tweetItems.append(itemHtml);
+
         // '<li>'+tweet.text+'</li>');
       });
     });

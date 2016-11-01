@@ -163,8 +163,8 @@ $(() => {
         if(event) event.preventDefault();
         $sidebar.html(`
           <div class="tweetStream">Tweets Div
-            <ol class="tweetItems">
-            </ol>
+            <ul class="tweetItems">
+            </ul>
           </div>
         `);
       }
@@ -198,14 +198,33 @@ $(() => {
       }
 
       let $tweetStream = $('.tweetStream');
-      let $tweetItems = $('.tweetItems');
 
       function getTweets(title) {
         let tweets = $.get(`http://localhost:8000/api/tweets?title=${title}`)
         .done(function(data) {
+          let $tweetItems = $('.tweetItems');
           data.statuses.forEach((tweet) => {
             console.log(tweet);
-            $sidebar.append('<li>'+tweet.text+'</li>');
+            let itemHtml =
+            
+              '<li class="stream-item">'+'<div class="tweet">'+'<a href="#">' +
+                  '<img src="'+ tweet.user.profile_image_url +'" alt="User image goes here.">' +
+                  '</a>' +
+                '<div class="content">' +
+                   '<strong class="fullname">'+ tweet.user.name +'</strong>' +
+                   '<span>&rlm;</span>' +
+                   '<span>@</span><b>' + tweet.user.screen_name + '</b>' +
+                   '&nbsp;&middot;&nbsp;' +
+                   '<small class="time">' +
+                      tweet.created_at +
+                   '</small>' +
+                   '<p>' + tweet.text +'</p>' +
+                  '</div>' +
+                '</div>' +
+              '</li>'
+            ;
+            $tweetItems.append(itemHtml);
+
               // '<li>'+tweet.text+'</li>');
           });
         });
