@@ -6,6 +6,7 @@ $(function () {
   var infoWindow = void 0;
   var circles = [];
   var checkBoxesChecked = void 0;
+  var $sidebar = $('.sidebar');
 
   var map = new google.maps.Map($mapDiv[0], {
     center: { lat: 42.77509, lng: 13.01239 },
@@ -31,6 +32,7 @@ $(function () {
 
   function goBack() {
     resetMap();
+    showFilterForm();
   }
 
   //RESET MAP
@@ -45,7 +47,6 @@ $(function () {
   function populateMap() {
 
     var getEvents = $.get('http://eonet.sci.gsfc.nasa.gov/api/v2/events').done(function (data) {
-
       data.events.forEach(function (disaster) {
         if (disaster.geometries[0].coordinates[0] instanceof Array) {
           (function () {
@@ -97,7 +98,7 @@ $(function () {
 
   function showLoginForm() {
     if (event) event.preventDefault();
-    $container.html('\n      <div id="logInForm">\n      <form class="login" action="api/login" method="post" onchange="getCheckedBoxes()">\n      <label for="email"></label>\n      <input type="text" name="email" placeholder="email" value="">\n      <label for="password"></label>\n      <input type="password" name="password" placeholder="password" value="">\n      <input type="submit" name="Log in" value="Log in" class=\'button\'><br>\n      </form>\n      </div>\n      <br><br><br>\n      <div id="registerForm">\n      <form class="register" action="api/register" method="post">\n      <label for="username"></label>\n      <input type="text" name="username" placeholder="username" value="">\n      <label for="email"></label>\n      <input type="text" name="email" placeholder="email" value="">\n      <label for="password"></label>\n      <input type="password" name="password" placeholder="password" value="">\n      <label for="passwordConfirmation"></label>\n      <input type="password" name="passwordConfirmation" placeholder="password confirmation" value="">\n      <input type="submit" name="register" value="Register" class=\'button\'><br>\n      </form>\n      </div>\n      ');
+    $sidebar.html('\n      <div id="logInForm">\n      <form class="login" action="api/login" method="post" onchange="getCheckedBoxes()">\n      <label for="email"></label>\n      <input type="text" name="email" placeholder="email" value="">\n      <label for="password"></label>\n      <input type="password" name="password" placeholder="password" value="">\n      <input type="submit" name="Log in" value="Log in" class=\'button\'><br>\n      </form>\n      </div>\n\n      <div id="registerForm">\n      <form class="register" action="api/register" method="post">\n      <label for="username"></label>\n      <input type="text" name="username" placeholder="username" value="">\n      <label for="email"></label>\n      <input type="text" name="email" placeholder="email" value="">\n      <label for="password"></label>\n      <input type="password" name="password" placeholder="password" value="">\n      <label for="passwordConfirmation"></label>\n      <input type="password" name="passwordConfirmation" placeholder="password confirmation" value="">\n      <input type="submit" name="register" value="Register" class=\'button\'><br>\n      </form>\n      </div>\n      ');
   }
 
   function handleForm() {
@@ -127,12 +128,17 @@ $(function () {
 
   function showFilterForm() {
     if (event) event.preventDefault();
-    $container.html('\n        <form class="filter" action="#" method="get">\n        <input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought\n        <input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze\n        <input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires\n        <input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods\n        <input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms\n        <input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes\n        <input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color\n        <input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides\n        <input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice\n        <input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes\n        <input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow\n        <input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme\n        <input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade\n        <button>Filter</button>\n        <button id="logOut">Log Out</button>\n        </form>\n        ');
+    $sidebar.html('\n        <form class="filter" action="#" method="get">\n        <input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought\n        <input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze\n        <input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires\n        <input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods\n        <input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms\n        <input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes\n        <input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color\n        <input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides\n        <input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice\n        <input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes\n        <input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow\n        <input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme\n        <input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade\n        <button>Filter</button>\n        <button id="logOut">Log Out</button>\n        </form>\n        ');
     $("input").on("click", function () {
       var inputValue = this.value;
       console.log(inputValue);
       getCheckedBoxes();
     });
+  }
+
+  function showTwitterForm() {
+    if (event) event.preventDefault();
+    $sidebar.html('\n          <div class="tweetStream">Tweets Div\n            <ul class="tweetItems">\n            </ul>\n          </div>\n        ');
   }
 
   function logout() {
@@ -148,6 +154,7 @@ $(function () {
   //ADD INFO WINDOW
   function addInfoWindowForDisaster(disaster, circle) {
     google.maps.event.addListener(circle, "click", function () {
+      getTweets(disaster.title);
       console.log(circle.category);
       infoWindow = new google.maps.InfoWindow({
         content: '\n            <h2>' + disaster.title + '</h2>\n            <h4>' + disaster.geometries[0].date + '</h4>\n            <a href="' + disaster.sources[0].url + '" target="_blank">More Information</a>\n            <button id="goBack">Go Back</button>',
@@ -160,8 +167,25 @@ $(function () {
         circle.setMap(null);
       });
       circles = [];
-      google.maps.event.addListener(map, 'idle', function () {
+      setTimeout(function () {
         infoWindow.open(map, circle);
+      }, 1500);
+      showTwitterForm();
+    });
+  }
+
+  var $tweetStream = $('.tweetStream');
+
+  function getTweets(title) {
+    console.log('in getTweets');
+    var tweets = $.get('http://localhost:8000/api/tweets?title=' + title).done(function (data) {
+      var $tweetItems = $('.tweetItems');
+      data.statuses.forEach(function (tweet) {
+        // console.log(tweet);
+        var itemHtml = '<li class="stream-item">' + '<div class="tweet">' + '<a href="#">' + '<img src="' + tweet.user.profile_image_url + '" alt="User image goes here.">' + '</a>' + '<div class="content">' + '<strong class="fullname">' + tweet.user.name + '</strong>' + '<span>&rlm;</span>' + '<span>@</span><b>' + tweet.user.screen_name + '</b>' + '&nbsp;&middot;&nbsp;' + '<small class="time">' + tweet.created_at + '</small>' + '<p>' + tweet.text + '</p>' + '</div>' + '</div>' + '</li>';
+        $tweetItems.append(itemHtml);
+
+        // '<li>'+tweet.text+'</li>');
       });
     });
   }

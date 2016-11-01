@@ -4,6 +4,7 @@ $(() => {
   let infoWindow;
   let circles = [];
   let checkBoxesChecked;
+  let $sidebar = $('.sidebar');
 
   let map = new google.maps.Map($mapDiv[0], {
     center: { lat: 42.77509, lng: 13.01239 },
@@ -29,6 +30,7 @@ $(() => {
 
   function goBack() {
     resetMap();
+    showFilterForm();
   }
 
   //RESET MAP
@@ -39,12 +41,12 @@ $(() => {
       infoWindow = undefined;
     }
 
+
   //POPULATE MAP
   function populateMap() {
 
     let getEvents = $.get('http://eonet.sci.gsfc.nasa.gov/api/v2/events')
     .done(function(data) {
-
       data.events.forEach((disaster) => {
         if(disaster.geometries[0].coordinates[0] instanceof Array) {
           let bounds = new google.maps.LatLngBounds();
@@ -94,7 +96,7 @@ $(() => {
 
   function showLoginForm() {
     if (event) event.preventDefault();
-    $container.html(`
+    $sidebar.html(`
       <div id="logInForm">
       <form class="login" action="api/login" method="post" onchange="getCheckedBoxes()">
       <label for="email"></label>
@@ -104,7 +106,7 @@ $(() => {
       <input type="submit" name="Log in" value="Log in" class='button'><br>
       </form>
       </div>
-      <br><br><br>
+
       <div id="registerForm">
       <form class="register" action="api/register" method="post">
       <label for="username"></label>
@@ -148,7 +150,7 @@ $(() => {
 
     function showFilterForm() {
       if (event) event.preventDefault();
-      $container.html(`
+      $sidebar.html(`
         <form class="filter" action="#" method="get">
         <input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought
         <input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze
@@ -174,6 +176,16 @@ $(() => {
         });
       }
 
+      function showTwitterForm() {
+        if(event) event.preventDefault();
+        $sidebar.html(`
+          <div class="tweetStream">Tweets Div
+            <ul class="tweetItems">
+            </ul>
+          </div>
+        `);
+      }
+
       function logout() {
         if(event) event.preventDefault();
         localStorage.removeItem('token');
@@ -187,6 +199,7 @@ $(() => {
       //ADD INFO WINDOW
       function addInfoWindowForDisaster(disaster, circle) {
         google.maps.event.addListener(circle, "click", () => {
+          getTweets(disaster.title);
           console.log(circle.category);
           infoWindow = new google.maps.InfoWindow({
             content: `
@@ -203,8 +216,43 @@ $(() => {
             circle.setMap(null);
           });
           circles = [];
-          google.maps.event.addListener(map, 'idle', function() {
-           infoWindow.open(map, circle);
+            setTimeout(() =>{
+              infoWindow.open(map, circle);
+            }, 1500);
+            showTwitterForm();
+      });
+    }
+
+      let $tweetStream = $('.tweetStream');
+
+      function getTweets(title) {
+        console.log('in getTweets');
+        let tweets = $.get(`http://localhost:8000/api/tweets?title=${title}`)
+        .done(function(data) {
+          let $tweetItems = $('.tweetItems');
+          data.statuses.forEach((tweet) => {
+            // console.log(tweet);
+            let itemHtml =
+
+              '<li class="stream-item">'+'<div class="tweet">'+'<a href="#">' +
+                  '<img src="'+ tweet.user.profile_image_url +'" alt="User image goes here.">' +
+                  '</a>' +
+                '<div class="content">' +
+                   '<strong class="fullname">'+ tweet.user.name +'</strong>' +
+                   '<span>&rlm;</span>' +
+                   '<span>@</span><b>' + tweet.user.screen_name + '</b>' +
+                   '&nbsp;&middot;&nbsp;' +
+                   '<small class="time">' +
+                      tweet.created_at +
+                   '</small>' +
+                   '<p>' + tweet.text +'</p>' +
+                  '</div>' +
+                '</div>' +
+              '</li>'
+            ;
+            $tweetItems.append(itemHtml);
+
+              // '<li>'+tweet.text+'</li>');
           });
         });
       }
@@ -258,4 +306,5 @@ $(() => {
           setTimeout(function(){ map.setZoom(cnt); }, 150);
         }
       }
-    });
+
+});
