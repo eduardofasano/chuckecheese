@@ -3,6 +3,7 @@
 $(function () {
   var circle = void 0;
   var $mapDiv = $('#map');
+  var infoWindow = void 0;
   var circles = [];
   var checkBoxesChecked = void 0;
 
@@ -28,21 +29,16 @@ $(function () {
     });
   });
 
-  // //CATEGORY ARRAY
-  // function createCategoryArray() {
-  //   console.log('inside createCategoryArray()');
-  //   let getCategories = $.get('http://eonet.sci.gsfc.nasa.gov/api/v2/categories')
-  //   .done(function(data) {
-  //     console.log("data ", data);
-  //     data.category.forEach((category) => {
-  //       categories.push(category);
-  //       console.log(categories);
-  //     });
-  //   })
-  //   .fail(function(data){
-  //     console.log('fail', data.responseText);
-  //   });
-  // }
+  //RESET MAP
+  function resetMap() {
+    infoWindow.close();
+    infoWindow;
+    smoothZoomOut(map, 1, map.getZoom());
+    populateMap();
+
+    // console.log(this);
+    // $(this).parent().innerHTML = null;
+  }
 
   //POPULATE MAP
   function populateMap() {
@@ -82,6 +78,7 @@ $(function () {
   var $container = $('#container');
   $container.on('submit', 'form', handleForm);
   $container.on('click', '#logOut', logout);
+  $mapDiv.on('click', '#goBack', resetMap);
 
   //CREATE FORM
   function isLoggedIn() {
@@ -91,7 +88,6 @@ $(function () {
   if (isLoggedIn()) {
     showFilterForm();
     populateMap();
-    createCategoryArray();
   } else {
     showLoginForm();
   }
@@ -123,7 +119,6 @@ $(function () {
       console.log('hello');
       showFilterForm();
       populateMap();
-      createCategoryArray();
     });
   }
 
@@ -151,14 +146,20 @@ $(function () {
   function addInfoWindowForDisaster(disaster, circle) {
     google.maps.event.addListener(circle, "click", function () {
       console.log(circle.category);
-      var infoWindow = new google.maps.InfoWindow({
-        content: '\n            <h2>' + disaster.title + '</h2>',
+      infoWindow = new google.maps.InfoWindow({
+        content: '\n            <h2>' + disaster.title + '</h2>\n            <h4>' + disaster.geometries[0].date + '</h4>\n            <a href=' + disaster.sources[0].url + ' target="_blank">More Information</a>\n            <button id="goBack">Go Back</button>',
         position: circle.center
       });
-      infoWindow.open(map, circle);
       map.setCenter(circle.center);
       map.panTo(circle.center);
-      smoothZoom(map, 8, map.getZoom());
+      smoothZoomIn(map, 8, map.getZoom());
+      circles.forEach(function (circle) {
+        circle.setMap(null);
+      });
+      circles = [];
+      google.maps.event.addListener(map, 'idle', function () {
+        infoWindow.open(map, circle);
+      });
     });
   }
 
@@ -186,14 +187,30 @@ $(function () {
   }
 
   //http://stackoverflow.com/questions/4752340/how-to-zoom-in-smoothly-on-a-marker-in-google-maps
-  function smoothZoom(map, max, cnt) {
+  function smoothZoomIn(map, max, cnt) {
     if (cnt >= max) {
       return;
     } else {
       (function () {
         var z = google.maps.event.addListener(map, 'zoom_changed', function (event) {
           google.maps.event.removeListener(z);
-          smoothZoom(map, max, cnt + 1);
+          smoothZoomIn(map, max, cnt + 1);
+        });
+        setTimeout(function () {
+          map.setZoom(cnt);
+        }, 150);
+      })();
+    }
+  }
+
+  function smoothZoomOut(map, min, cnt) {
+    if (cnt <= min) {
+      return;
+    } else {
+      (function () {
+        var z = google.maps.event.addListener(map, 'zoom_changed', function (event) {
+          google.maps.event.removeListener(z);
+          smoothZoomOut(map, min, cnt - 1);
         });
         setTimeout(function () {
           map.setZoom(cnt);
