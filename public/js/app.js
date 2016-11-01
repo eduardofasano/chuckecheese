@@ -120,6 +120,11 @@ $(function () {
     });
   }
 
+  function showTwitterForm() {
+    if (event) event.preventDefault();
+    $sidebar.html('\n          <div class="tweetStream">Tweets Div\n            <ol class="tweetItems">\n            </ol>\n          </div>\n        ');
+  }
+
   function logout() {
     if (event) event.preventDefault();
     localStorage.removeItem('token');
@@ -143,12 +148,20 @@ $(function () {
       map.setCenter(circle.center);
       map.panTo(circle.center);
       smoothZoom(map, 8, map.getZoom());
+      showTwitterForm();
     });
   }
 
+  var $tweetStream = $('.tweetStream');
+  var $tweetItems = $('.tweetItems');
+
   function getTweets(title) {
     var tweets = $.get('http://localhost:8000/api/tweets?title=' + title).done(function (data) {
-      console.log(data);
+      data.statuses.forEach(function (tweet) {
+        console.log(tweet);
+        $sidebar.append('<li>' + tweet.text + '</li>');
+        // '<li>'+tweet.text+'</li>');
+      });
     });
   }
 
