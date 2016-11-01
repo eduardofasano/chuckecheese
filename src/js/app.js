@@ -26,22 +26,6 @@ $(() => {
     });
   });
 
-  // //CATEGORY ARRAY
-  // function createCategoryArray() {
-  //   console.log('inside createCategoryArray()');
-  //   let getCategories = $.get('http://eonet.sci.gsfc.nasa.gov/api/v2/categories')
-  //   .done(function(data) {
-  //     console.log("data ", data);
-  //     data.category.forEach((category) => {
-  //       categories.push(category);
-  //       console.log(categories);
-  //     });
-  //   })
-  //   .fail(function(data){
-  //     console.log('fail', data.responseText);
-  //   });
-  // }
-
   //POPULATE MAP
   function populateMap() {
     let getEvents = $.get('http://eonet.sci.gsfc.nasa.gov/api/v2/events')
@@ -88,7 +72,6 @@ $(() => {
   if(isLoggedIn()) {
     showFilterForm();
     populateMap();
-    createCategoryArray();
   } else {
     showLoginForm();
   }
@@ -144,7 +127,6 @@ $(() => {
         console.log('hello');
         showFilterForm();
         populateMap();
-        createCategoryArray();
       });
     }
 
@@ -189,6 +171,7 @@ $(() => {
       //ADD INFO WINDOW
       function addInfoWindowForDisaster(disaster, circle) {
         google.maps.event.addListener(circle, "click", () => {
+          getTweets(disaster.title);
           console.log(circle.category);
           let infoWindow = new google.maps.InfoWindow({
             content: `
@@ -199,6 +182,13 @@ $(() => {
           map.setCenter(circle.center);
           map.panTo(circle.center);
           smoothZoom(map, 8, map.getZoom());
+        });
+      }
+
+      function getTweets(title) {
+        let tweets = $.get(`http://localhost:8000/api/tweets?title=${title}`)
+        .done(function(data) {
+          console.log(data);
         });
       }
 
@@ -238,4 +228,5 @@ $(() => {
           setTimeout(function(){ map.setZoom(cnt); }, 150);
         }
       }
-    });
+
+});
