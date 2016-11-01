@@ -1,6 +1,8 @@
 $(() => {
+  let circle;
   let $mapDiv = $('#map');
   let circles = [];
+  let checkBoxesChecked;
 
   let map = new google.maps.Map($mapDiv[0], {
     center: { lat: 42.77509, lng: 13.01239 },
@@ -24,7 +26,21 @@ $(() => {
     });
   });
 
-
+  // //CATEGORY ARRAY
+  // function createCategoryArray() {
+  //   console.log('inside createCategoryArray()');
+  //   let getCategories = $.get('http://eonet.sci.gsfc.nasa.gov/api/v2/categories')
+  //   .done(function(data) {
+  //     console.log("data ", data);
+  //     data.category.forEach((category) => {
+  //       categories.push(category);
+  //       console.log(categories);
+  //     });
+  //   })
+  //   .fail(function(data){
+  //     console.log('fail', data.responseText);
+  //   });
+  // }
 
   //POPULATE MAP
   function populateMap() {
@@ -36,20 +52,22 @@ $(() => {
           disaster.geometries[0].coordinates.forEach((coords) => {
             bounds.extend(new google.maps.LatLng(coords[1], coords[0]));
           });
-          let circle = new google.maps.Circle({
+          circle = new google.maps.Circle({
             center: bounds.getCenter(),
             map: map,
             radius: 500000,
-            fillColor: '#ff00ff'
+            fillColor: '#ff00ff',
+            category: disaster.categories[0].title
           });
           circles.push(circle);
           addInfoWindowForDisaster(disaster, circle);
         } else {
-          let circle = new google.maps.Circle({
+          circle = new google.maps.Circle({
             center: new google.maps.LatLng(disaster.geometries[0].coordinates[1], disaster.geometries[0].coordinates[0]),
             map: map,
             radius: 500000,
-            fillColor: '#ff00ff'
+            fillColor: '#ff00ff',
+            category: disaster.categories[0].title
           });
           circles.push(circle);
           addInfoWindowForDisaster(disaster, circle);
@@ -62,7 +80,6 @@ $(() => {
   $container.on('submit', 'form', handleForm);
   $container.on('click', '#logOut', logout);
 
-
   //CREATE FORM
   function isLoggedIn() {
     return !!localStorage.getItem('token');
@@ -71,6 +88,7 @@ $(() => {
   if(isLoggedIn()) {
     showFilterForm();
     populateMap();
+    createCategoryArray();
   } else {
     showLoginForm();
   }
@@ -79,7 +97,7 @@ $(() => {
     if (event) event.preventDefault();
     $container.html(`
       <div id="logInForm">
-      <form class="login" action="api/login" method="post">
+      <form class="login" action="api/login" method="post" onchange="getCheckedBoxes()">
       <label for="email"></label>
       <input type="text" name="email" placeholder="email" value="">
       <label for="password"></label>
@@ -126,6 +144,7 @@ $(() => {
         console.log('hello');
         showFilterForm();
         populateMap();
+        createCategoryArray();
       });
     }
 
@@ -133,23 +152,28 @@ $(() => {
       if (event) event.preventDefault();
       $container.html(`
         <form class="filter" action="#" method="get">
-        <input type="checkbox" name="drought" value="Drought">Drought
-        <input type="checkbox" name="dustAndHaze" value="Dust and Haze">Dust and Haze
-        <input type="checkbox" name="wildfires" value="Wildfires">Wildfires
-        <input type="checkbox" name="floods" value="Floods">Floods
-        <input type="checkbox" name="severeStorms" value="Severe Storms">Severe Storms
-        <input type="checkbox" name="volcanoes" value="Volcanoes">Volcanoes
-        <input type="checkbox" name="waterColor" value="Water Color">Water Color
-        <input type="checkbox" name="landslides" value="Landslides">Landslides
-        <input type="checkbox" name="seaLakeIce" value="Sea Lake Ice">Sea Lake Ice
-        <input type="checkbox" name="earthquakes" value="Earthquakes">Earthquakes
-        <input type="checkbox" name="snow" value="Snow">Snow
-        <input type="checkbox" name="temperatureExtreme" value="Temperature Extreme">Temperature Extreme
-        <input type="checkbox" name="manMade" value="Man Made">Man Made
+        <input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought
+        <input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze
+        <input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires
+        <input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods
+        <input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms
+        <input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes
+        <input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color
+        <input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides
+        <input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice
+        <input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes
+        <input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow
+        <input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme
+        <input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade
         <button>Filter</button>
         <button id="logOut">Log Out</button>
         </form>
         `);
+        $("input").on("click", function () {
+          let inputValue = this.value;
+          console.log(inputValue);
+          getCheckedBoxes();
+        });
       }
 
       function logout() {
@@ -162,12 +186,10 @@ $(() => {
         circles = [];
       }
 
-
       //ADD INFO WINDOW
       function addInfoWindowForDisaster(disaster, circle) {
         google.maps.event.addListener(circle, "click", () => {
-          // console.log(circle);
-          // console.log(disaster);
+          console.log(circle.category);
           let infoWindow = new google.maps.InfoWindow({
             content: `
             <h2>${disaster.title}</h2>`,
@@ -180,6 +202,29 @@ $(() => {
         });
       }
 
+      function getCheckedBoxes () {
+        console.log("change");
+        let checkBoxes = $(".checkBox");
+        checkBoxesChecked = [];
+        for (var i=0; i<checkBoxes.length; i++) {
+          if (checkBoxes[i].checked) {
+            checkBoxesChecked.push(checkBoxes[i].defaultValue);
+          }
+        }
+        console.log(checkBoxesChecked);
+        filterCategories();
+      }
+
+      function filterCategories () {
+        for(var i=0; i<circles.length; i++) {
+          if((checkBoxesChecked.indexOf(circles[i].category)) > -1) {
+              circles[i].setVisible(true);
+          } else {
+              circles[i].setVisible(false);
+          }
+        }
+      }
+
       //http://stackoverflow.com/questions/4752340/how-to-zoom-in-smoothly-on-a-marker-in-google-maps
       function smoothZoom (map, max, cnt) {
         if (cnt >= max) {
@@ -190,7 +235,7 @@ $(() => {
             google.maps.event.removeListener(z);
             smoothZoom(map, max, cnt + 1);
           });
-          setTimeout(function(){ map.setZoom(cnt); }, 200);
+          setTimeout(function(){ map.setZoom(cnt); }, 150);
         }
       }
     });
