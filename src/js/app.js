@@ -3,6 +3,7 @@ $(() => {
   let $mapDiv = $('#map');
   let circles = [];
   let checkBoxesChecked;
+  let $sidebar = $('.sidebar');
 
   let map = new google.maps.Map($mapDiv[0], {
     center: { lat: 42.77509, lng: 13.01239 },
@@ -78,7 +79,7 @@ $(() => {
 
   function showLoginForm() {
     if (event) event.preventDefault();
-    $container.html(`
+    $sidebar.html(`
       <div id="logInForm">
       <form class="login" action="api/login" method="post" onchange="getCheckedBoxes()">
       <label for="email"></label>
@@ -88,7 +89,7 @@ $(() => {
       <input type="submit" name="Log in" value="Log in" class='button'><br>
       </form>
       </div>
-      <br><br><br>
+
       <div id="registerForm">
       <form class="register" action="api/register" method="post">
       <label for="username"></label>
@@ -132,7 +133,7 @@ $(() => {
 
     function showFilterForm() {
       if (event) event.preventDefault();
-      $container.html(`
+      $sidebar.html(`
         <form class="filter" action="#" method="get">
         <input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought
         <input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze
