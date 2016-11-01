@@ -39,9 +39,8 @@ router.route('/users/:id')
 
 //TWITTER ROUTES
 router.get('/tweets', (req, res) => {
-  console.log(req.query.title);
-  twitter.get('search/tweets', { q: `${req.query.title} since:2011-07-11`, count: 100 }, function(err, data, response) {
-    res.send(data);
+  twitter.get('search/tweets', { q: req.query.q, count: 100 }, function(err, data, response) {
+    res.json(data);
   });
 });
 

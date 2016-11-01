@@ -1,11 +1,11 @@
 $(() => {
   let circle;
-  let $mapDiv = $('#map');
-  let infoWindow;
   let circles = [];
+  let infoWindow;
   let checkBoxesChecked;
   let $sidebar = $('.sidebar');
-
+  let $container = $('#container');
+  let $mapDiv = $('#map');
   let map = new google.maps.Map($mapDiv[0], {
     center: { lat: 42.77509, lng: 13.01239 },
     zoom: 4
@@ -18,7 +18,6 @@ $(() => {
       lng:position.coords.longitude
     };
     map.panTo(latLng);
-    //map.setZoom(5);
 
     let maker = new google.maps.Marker({
       position: latLng,
@@ -28,6 +27,8 @@ $(() => {
     });
   });
 
+  //GO BACK
+  $mapDiv.on('click', '#goBack', goBack);
   function goBack() {
     resetMap();
     showFilterForm();
@@ -41,10 +42,8 @@ $(() => {
       infoWindow = undefined;
     }
 
-
   //POPULATE MAP
   function populateMap() {
-
     let getEvents = $.get('http://eonet.sci.gsfc.nasa.gov/api/v2/events')
     .done(function(data) {
       data.events.forEach((disaster) => {
@@ -77,12 +76,7 @@ $(() => {
     });
   }
 
-  let $container = $('#container');
-  $container.on('submit', 'form', handleForm);
-  $container.on('click', '#logOut', logout);
-  $mapDiv.on('click', '#goBack', goBack);
-
-  //CREATE FORM
+  //CREATE LOGIN FORM
   function isLoggedIn() {
     return !!localStorage.getItem('token');
   }
@@ -123,6 +117,8 @@ $(() => {
       `);
     }
 
+    //HANDLE-FORM
+    $container.on('submit', 'form', handleForm);
     function handleForm() {
       if(event) event.preventDefault();
       let token = localStorage.getItem('token');
@@ -148,6 +144,19 @@ $(() => {
       });
     }
 
+    //LOGOUT
+    $container.on('click', '#logOut', logout);
+    function logout() {
+      if(event) event.preventDefault();
+      localStorage.removeItem('token');
+      showLoginForm();
+      circles.forEach((circle) => {
+        circle.setMap(null);
+      });
+      circles = [];
+    }
+
+    //CREATE FILTER FORM
     function showFilterForm() {
       if (event) event.preventDefault();
       $sidebar.html(`
@@ -176,6 +185,7 @@ $(() => {
         });
       }
 
+      //TWITTER FUNCTIONALITY
       function showTwitterForm() {
         if(event) event.preventDefault();
         $sidebar.html(`
@@ -186,48 +196,10 @@ $(() => {
         `);
       }
 
-      function logout() {
-        if(event) event.preventDefault();
-        localStorage.removeItem('token');
-        showLoginForm();
-        circles.forEach((circle) => {
-          circle.setMap(null);
-        });
-        circles = [];
-      }
-
-      //ADD INFO WINDOW
-      function addInfoWindowForDisaster(disaster, circle) {
-        google.maps.event.addListener(circle, "click", () => {
-          getTweets(disaster.title);
-          console.log(circle.category);
-          infoWindow = new google.maps.InfoWindow({
-            content: `
-            <h2>${disaster.title}</h2>
-            <h4>${disaster.geometries[0].date}</h4>
-            <a href="${disaster.sources[0].url}" target="_blank">More Information</a>
-            <button id="goBack">Go Back</button>`,
-            position: circle.center,
-          });
-          map.setCenter(circle.center);
-          map.panTo(circle.center);
-          smoothZoomIn(map, 8, map.getZoom());
-          circles.forEach((circle) => {
-            circle.setMap(null);
-          });
-          circles = [];
-            setTimeout(() =>{
-              infoWindow.open(map, circle);
-            }, 1500);
-            showTwitterForm();
-      });
-    }
-
       let $tweetStream = $('.tweetStream');
 
       function getTweets(title) {
-        console.log('in getTweets');
-        let tweets = $.get(`http://localhost:8000/api/tweets?title=${title}`)
+        let tweets = $.get(`http://localhost:8000/api/tweets?q=${title}`)
         .done(function(data) {
           let $tweetItems = $('.tweetItems');
           data.statuses.forEach((tweet) => {
@@ -257,6 +229,34 @@ $(() => {
         });
       }
 
+      //ADD INFO WINDOW
+      function addInfoWindowForDisaster(disaster, circle) {
+        google.maps.event.addListener(circle, "click", () => {
+          getTweets(disaster.title);
+          console.log(circle.category);
+          infoWindow = new google.maps.InfoWindow({
+            content: `
+            <h2>${disaster.title}</h2>
+            <h4>${disaster.geometries[0].date}</h4>
+            <a href="${disaster.sources[0].url}" target="_blank">More Information</a>
+            <button id="goBack">Go Back</button>`,
+            position: circle.center,
+          });
+          map.setCenter(circle.center);
+          map.panTo(circle.center);
+          smoothZoomIn(map, 8, map.getZoom());
+          circles.forEach((circle) => {
+            circle.setMap(null);
+          });
+          circles = [];
+            setTimeout(() =>{
+              infoWindow.open(map, circle);
+            }, 1500);
+            showTwitterForm();
+      });
+    }
+
+      //FILTERING FUNCTIONALITY
       function getCheckedBoxes () {
         console.log("change");
         let checkBoxes = $(".checkBox");
@@ -280,6 +280,7 @@ $(() => {
         }
       }
 
+      //ZOOM-FUNCTIONS
       //http://stackoverflow.com/questions/4752340/how-to-zoom-in-smoothly-on-a-marker-in-google-maps
       function smoothZoomIn (map, max, cnt) {
         if (cnt >= max) {
