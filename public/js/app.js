@@ -11,23 +11,23 @@ $(function () {
   var map = new google.maps.Map($mapDiv[0], {
     center: { lat: 42.77509, lng: 13.01239 },
     zoom: 4,
-    styles: [{ "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "color": "#000000" }] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "color": "#ffffff" }] }, { "featureType": "administrative.province", "elementType": "all", "stylers": [{ "visibility": "on" }] }, { "featureType": "landscape", "elementType": "all", "stylers": [{ "saturation": "-39" }, { "lightness": "35" }, { "gamma": "1.08" }] }, { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "saturation": "0" }] }, { "featureType": "landscape.man_made", "elementType": "all", "stylers": [{ "saturation": "-100" }, { "lightness": "10" }] }, { "featureType": "landscape.man_made", "elementType": "geometry.stroke", "stylers": [{ "saturation": "-100" }, { "lightness": "-14" }] }, { "featureType": "poi", "elementType": "all", "stylers": [{ "saturation": "-100" }, { "lightness": "10" }, { "gamma": "2.26" }] }, { "featureType": "poi", "elementType": "labels.text", "stylers": [{ "saturation": "-100" }, { "lightness": "-3" }] }, { "featureType": "road", "elementType": "all", "stylers": [{ "saturation": "-100" }, { "lightness": "54" }] }, { "featureType": "road", "elementType": "geometry.stroke", "stylers": [{ "saturation": "-100" }, { "lightness": "-7" }] }, { "featureType": "road.arterial", "elementType": "all", "stylers": [{ "saturation": "-100" }] }, { "featureType": "road.local", "elementType": "all", "stylers": [{ "saturation": "-100" }, { "lightness": "-2" }] }, { "featureType": "transit", "elementType": "all", "stylers": [{ "saturation": "-100" }] }, { "featureType": "water", "elementType": "geometry.fill", "stylers": [{ "saturation": "-100" }, { "lightness": "100" }] }, { "featureType": "water", "elementType": "geometry.stroke", "stylers": [{ "saturation": "-100" }, { "lightness": "-100" }] }]
+    styles: [{ "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "saturation": 36 }, { "color": "#333333" }, { "lightness": 40 }] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "visibility": "on" }, { "color": "#ffffff" }, { "lightness": 16 }] }, { "featureType": "all", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, { "featureType": "administrative", "elementType": "geometry.fill", "stylers": [{ "color": "#fefefe" }, { "lightness": 20 }] }, { "featureType": "administrative", "elementType": "geometry.stroke", "stylers": [{ "color": "#fefefe" }, { "lightness": 17 }, { "weight": 1.2 }] }, { "featureType": "administrative.country", "elementType": "geometry.stroke", "stylers": [{ "weight": "0.94" }, { "visibility": "on" }] }, { "featureType": "administrative.province", "elementType": "geometry.stroke", "stylers": [{ "visibility": "on" }] }, { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "color": "#f5f5f5" }, { "lightness": 20 }] }, { "featureType": "poi", "elementType": "geometry", "stylers": [{ "color": "#f5f5f5" }, { "lightness": 21 }] }, { "featureType": "poi.park", "elementType": "geometry", "stylers": [{ "color": "#dedede" }, { "lightness": 21 }] }, { "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [{ "color": "#ffffff" }, { "lightness": 17 }] }, { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#ffffff" }, { "lightness": 29 }, { "weight": 0.2 }] }, { "featureType": "road.arterial", "elementType": "geometry", "stylers": [{ "color": "#ffffff" }, { "lightness": 18 }] }, { "featureType": "road.local", "elementType": "geometry", "stylers": [{ "color": "#ffffff" }, { "lightness": 16 }] }, { "featureType": "transit", "elementType": "geometry", "stylers": [{ "color": "#f2f2f2" }, { "lightness": 19 }] }, { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#e9e9e9" }, { "lightness": 17 }] }]
   });
 
   var colorPalette = {
-    "Drought": "#88b086",
+    "Drought": "#e3a744",
     "Dust And Haze": "#e9dab1",
     "Wildfires": "#d25566",
     "Floods": "#79b4e5",
     "Severe Storms": "#a4dddc",
-    "Volcanoes": "#e3a744",
+    "Volcanoes": "#88b086",
     "Water Color": "#bbe2b8",
     "Landslides": "#f1c7d9",
     "Sea Lake Ice": "#d686d8",
     "Earthquakes": "#d5bae5",
     "Snow": "#d98f91",
-    "Temperature Extremes": "#f3f58c",
-    "Manmade": "#8a88e5"
+    "Temperature Extremes": "#8a88e5",
+    "Manmade": "#f3f58c"
   };
 
   //CURRENT POSITION
@@ -79,10 +79,8 @@ $(function () {
               fillColor: colorPalette[category],
               strokeWeight: 1,
               strokeColor: colorPalette[category],
-              fillOpacity: 0.4,
               category: disaster.categories[0].title
             });
-            console.log(colorPalette[category]);
             circles.push(circle);
             addInfoWindowForDisaster(disaster, circle);
           })();
@@ -100,6 +98,7 @@ $(function () {
           addInfoWindowForDisaster(disaster, circle);
         }
       });
+      setBoxStatus();
     });
   }
 
@@ -162,13 +161,29 @@ $(function () {
   //CREATE FILTER FORM
   function showFilterForm() {
     if (event) event.preventDefault();
-    $sidebar.html('\n        <ul class="checkbox-grid">\n          <form class="filter" action="#" method="get">\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox button" name="drought" value="Drought" checked="true">Drought</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade</label></li>\n          </form>\n        </ul>\n        <button id="logOut">Log Out</button>\n        ');
+    $sidebar.html('\n        <ul class="checkbox-grid">\n          <form class="filter" action="#" method="get">\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme</label></li>\n          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade</label></li>\n          </form>\n        </ul>\n        <button id="logOut">Log Out</button>\n        ');
     $("input").on("click", function () {
       $(this).parent().toggleClass('clicked');
       var inputValue = this.value;
       console.log(inputValue);
       getCheckedBoxes();
     });
+  }
+
+  //INPUT BOX FUNCTIONALITY
+  function setBoxStatus() {
+    var inputs = $(".checkBox");
+    var categoriesOnBoard = [];
+    for (var i = 0; i < inputs.length; i++) {
+      var category = circles[i].category;
+      if (categoriesOnBoard.indexOf(category) < 0) {
+        categoriesOnBoard.push(category);
+        console.log(categoriesOnBoard);
+      }
+      if (categoriesOnBoard.indexOf(inputs[i].defaultValue) < 0) {
+        inputs[i].setAttribute("disabled", true);
+      }
+    }
   }
 
   //TWITTER FUNCTIONALITY
