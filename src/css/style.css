@@ -6,7 +6,7 @@
 
 
 #logInForm {
-  padding-top: 50px;
+  padding-top: 120px;
 }
 
 #registerForm {
@@ -15,23 +15,53 @@
 
 form {
 text-align: center;
+}
+
+.checkbox-grid li {
+    display: block;
 
 }
 
-.button {
+input.button {
    width: 147px;
+   text-align: center;
+   margin: auto;
 }
+
 
 .logo {
-  height: 40px;
-  margin-left: 165px;
-  margin-top: 60px;
+  height: 80px;
+  margin: auto;
+
 }
 
 .filter {
 text-align: center;
-padding-top: 200px;
+padding-top: 80px;
 }
+
+
+#logOut   {
+
+  margin-top: 20px;
+	text-align: center;
+	text-shadow: -1px -1px 0px rgba(255,255,255,0.3), 1px 1px 0px rgba(0,0,0,0.8);
+	color: #222;
+	opacity: 0.4;
+  display: block;
+  margin: auto;
+}
+}
+
+div.gm-style-iw {
+  text-align: center;
+  display: block;
+}
+
+
+/*TWITTER STYLING BELOW ///////////////////////////////////////////////////////////////////*/
+
+
 
 .tweetItems {
  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -129,7 +159,7 @@ textarea {
  color: #d40d12 ;
 }
 
-input[type="submit"] {
+/*input[type="submit"] {
  background-color: #47A1D3 ;
  border: 1px solid transparent;
  color: #fff;
@@ -144,7 +174,7 @@ input[type="submit"] {
  line-height: normal;
  cursor: pointer;
  outline: none;
-}
+}*/
 
 .expanded {
  max-height: 240px;
@@ -320,7 +350,7 @@ textarea {
  color: #d40d12 ;
 }
 
-input[type="submit"] {
+/*input[type="submit"] {
  background-color: #47A1D3 ;
  border: 1px solid transparent;
  color: #fff;
@@ -335,7 +365,7 @@ input[type="submit"] {
  line-height: normal;
  cursor: pointer;
  outline: none;
-}
+}*/
 
 .expanded {
  max-height: 240px;

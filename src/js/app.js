@@ -57,6 +57,8 @@ $(() => {
             map: map,
             radius: 500000,
             fillColor: '#ff00ff',
+             strokeWeight: 1,
+             strokeColor: '#ff00ff',
             category: disaster.categories[0].title
           });
           circles.push(circle);
@@ -66,7 +68,9 @@ $(() => {
             center: new google.maps.LatLng(disaster.geometries[0].coordinates[1], disaster.geometries[0].coordinates[0]),
             map: map,
             radius: 500000,
-            fillColor: '#ff00ff',
+            fillColor: '#0000ff',
+            strokeWeight: 1,
+            strokeColor: '#0000ff',
             category: disaster.categories[0].title
           });
           circles.push(circle);
@@ -91,12 +95,13 @@ $(() => {
   function showLoginForm() {
     if (event) event.preventDefault();
     $sidebar.html(`
+      <div class="formDiv">
       <div id="logInForm">
       <form class="login" action="api/login" method="post" onchange="getCheckedBoxes()">
       <label for="email"></label>
       <input type="text" name="email" placeholder="email" value="">
       <label for="password"></label>
-      <input type="password" name="password" placeholder="password" value="">
+      <input type="password" name="password" placeholder="password" value=""><br>
       <input type="submit" name="Log in" value="Log in" class='button'><br>
       </form>
       </div>
@@ -110,9 +115,10 @@ $(() => {
       <label for="password"></label>
       <input type="password" name="password" placeholder="password" value="">
       <label for="passwordConfirmation"></label>
-      <input type="password" name="passwordConfirmation" placeholder="password confirmation" value="">
+      <input type="password" name="passwordConfirmation" placeholder="password confirmation" value=""><br>
       <input type="submit" name="register" value="Register" class='button'><br>
       </form>
+      </div>
       </div>
       `);
     }
@@ -160,23 +166,25 @@ $(() => {
     function showFilterForm() {
       if (event) event.preventDefault();
       $sidebar.html(`
-        <form class="filter" action="#" method="get">
-        <input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought
-        <input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze
-        <input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires
-        <input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods
-        <input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms
-        <input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes
-        <input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color
-        <input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides
-        <input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice
-        <input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes
-        <input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow
-        <input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme
-        <input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade
-        <button>Filter</button>
-        <button id="logOut">Log Out</button>
-        </form>
+        <ul class="checkbox-grid">
+            <li><form class="filter" action="#" method="get">
+            <li><input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought</li>
+            <li><input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze</li>
+            <li><input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires</li>
+            <li><input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods</li>
+            <li><input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms</li>
+            <li><input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes</li>
+            <li><input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color</li>
+            <li><input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides</li>
+            <li><input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice</li>
+            <li><input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes</li>
+            <li><input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow</li>
+            <li><input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme</li>
+            <li><input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade</li>
+            </ul>
+            <button id="logOut">Log Out</button>
+            </form>
+
         `);
         $("input").on("click", function () {
           let inputValue = this.value;
