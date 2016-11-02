@@ -168,25 +168,26 @@ $(() => {
       $sidebar.html(`
         <ul class="checkbox-grid">
             <li><form class="filter" action="#" method="get">
-            <li><input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought</li>
-            <li><input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze</li>
-            <li><input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires</li>
-            <li><input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods</li>
-            <li><input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms</li>
-            <li><input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes</li>
-            <li><input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color</li>
-            <li><input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides</li>
-            <li><input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice</li>
-            <li><input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes</li>
-            <li><input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow</li>
-            <li><input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme</li>
-            <li><input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade</li>
+            <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox button" name="drought" value="Drought" checked="true">Drought</label></li>
+            <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze</label></li>
+            <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires</label></li>
+            <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods</label></li>
+            <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms</label></li>
+            <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes</label></li>
+            <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color</label></li>
+            <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides</label></li>
+            <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice</label></li>
+            <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes</label></li>
+            <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow</label></li>
+            <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme</label></li>
+            <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade</label></li>
             </ul>
             <button id="logOut">Log Out</button>
             </form>
 
         `);
         $("input").on("click", function () {
+          $(this).parent().toggleClass('clicked');
           let inputValue = this.value;
           console.log(inputValue);
           getCheckedBoxes();
@@ -318,5 +319,4 @@ $(() => {
           setTimeout(function(){ map.setZoom(cnt); }, 150);
         }
       }
-
 });
