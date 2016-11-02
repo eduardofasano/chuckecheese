@@ -10,7 +10,8 @@ $(function () {
   var $mapDiv = $('#map');
   var map = new google.maps.Map($mapDiv[0], {
     center: { lat: 42.77509, lng: 13.01239 },
-    zoom: 4
+    zoom: 4,
+    styles: [{ "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "saturation": 36 }, { "color": "#333333" }, { "lightness": 40 }] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "visibility": "on" }, { "color": "#ffffff" }, { "lightness": 16 }] }, { "featureType": "all", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, { "featureType": "administrative", "elementType": "geometry.fill", "stylers": [{ "color": "#fefefe" }, { "lightness": 20 }] }, { "featureType": "administrative", "elementType": "geometry.stroke", "stylers": [{ "color": "#fefefe" }, { "lightness": 17 }, { "weight": 1.2 }] }, { "featureType": "administrative.country", "elementType": "geometry.stroke", "stylers": [{ "weight": "0.94" }, { "visibility": "on" }] }, { "featureType": "administrative.province", "elementType": "geometry.stroke", "stylers": [{ "visibility": "on" }] }, { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "color": "#f5f5f5" }, { "lightness": 20 }] }, { "featureType": "poi", "elementType": "geometry", "stylers": [{ "color": "#f5f5f5" }, { "lightness": 21 }] }, { "featureType": "poi.park", "elementType": "geometry", "stylers": [{ "color": "#dedede" }, { "lightness": 21 }] }, { "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [{ "color": "#ffffff" }, { "lightness": 17 }] }, { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#ffffff" }, { "lightness": 29 }, { "weight": 0.2 }] }, { "featureType": "road.arterial", "elementType": "geometry", "stylers": [{ "color": "#ffffff" }, { "lightness": 18 }] }, { "featureType": "road.local", "elementType": "geometry", "stylers": [{ "color": "#ffffff" }, { "lightness": 16 }] }, { "featureType": "transit", "elementType": "geometry", "stylers": [{ "color": "#f2f2f2" }, { "lightness": 19 }] }, { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#e9e9e9" }, { "lightness": 17 }] }]
   });
 
   //CURRENT POSITION
@@ -166,8 +167,8 @@ $(function () {
       console.log(data);
       var $tweetItems = $('.tweetItems');
       data.statuses.forEach(function (tweet) {
-        // console.log(tweet);
-        var itemHtml = '<li class="stream-item">' + '<div class="tweet">' + '<a href="#">' + '<img src="' + tweet.user.profile_image_url + '" alt="User image goes here.">' + '</a>' + '<div class="content">' + '<strong class="fullname">' + tweet.user.name + '</strong>' + '<span>&rlm;</span>' + '<span>@</span><b>' + tweet.user.screen_name + '</b>' + '&nbsp;&middot;&nbsp;' + '<small class="time">' + tweet.created_at + '</small>' + '<p>' + tweet.text + '</p>' + '</div>' + '</div>' + '</li>';
+        console.log(tweet.text);
+        var itemHtml = '<li class="stream-item">' + '<div class="tweet">' + '<div id="image">' + '<img src="' + tweet.user.profile_image_url + '" alt="User image goes here.">' + '</div>' + '<div class="content">' + '<strong class="fullname">' + tweet.user.name + '</strong>' + '<span>&rlm;</span>' + '<span>@</span><b>' + tweet.user.screen_name + '</b>' + '&nbsp;&middot;&nbsp;' + '<small>' + tweet.created_at + '</small>' + '<p>' + tweet.text + '</p>' + '</div>' + '</div>' + '</li>';
         $tweetItems.append(itemHtml);
 
         // '<li>'+tweet.text+'</li>');

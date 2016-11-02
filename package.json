@@ -20,6 +20,7 @@
     "morgan": "^1.7.0",
     "twit": "^2.2.5",
     "twitter-node-client": "0.0.6",
+    "twitter-text": "^1.14.0",
     "validator": "^6.1.0"
   },
   "engines": {
