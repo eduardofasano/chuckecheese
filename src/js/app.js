@@ -8,7 +8,8 @@ $(() => {
   let $mapDiv = $('#map');
   let map = new google.maps.Map($mapDiv[0], {
     center: { lat: 42.77509, lng: 13.01239 },
-    zoom: 4
+    zoom: 4,
+    styles: [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#333333"},{"lightness":40}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#ffffff"},{"lightness":16}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#fefefe"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#fefefe"},{"lightness":17},{"weight":1.2}]},{"featureType":"administrative.country","elementType":"geometry.stroke","stylers":[{"weight":"0.94"},{"visibility":"on"}]},{"featureType":"administrative.province","elementType":"geometry.stroke","stylers":[{"visibility":"on"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"color":"#f5f5f5"},{"lightness":20}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#f5f5f5"},{"lightness":21}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#dedede"},{"lightness":21}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffffff"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#ffffff"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#f2f2f2"},{"lightness":19}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#e9e9e9"},{"lightness":17}]}]
   });
 
   //CURRENT POSITION
@@ -167,26 +168,26 @@ $(() => {
       if (event) event.preventDefault();
       $sidebar.html(`
         <ul class="checkbox-grid">
-        <li><form class="filter" action="#" method="get">
-        <li><input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought</li>
-        <li><input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze</li>
-        <li><input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires</li>
-        <li><input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods</li>
-        <li><input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms</li>
-        <li><input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes</li>
-        <li><input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color</li>
-        <li><input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides</li>
-        <li><input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice</li>
-        <li><input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes</li>
-        <li><input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow</li>
-        <li><input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme</li>
-        <li><input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade</li>
+          <form class="filter" action="#" method="get">
+          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox button" name="drought" value="Drought" checked="true">Drought</label></li>
+          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze</label></li>
+          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires</label></li>
+          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods</label></li>
+          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms</label></li>
+          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes</label></li>
+          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color</label></li>
+          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides</label></li>
+          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice</label></li>
+          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes</label></li>
+          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow</label></li>
+          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme</label></li>
+          <li><label class="labelStyle clicked"><input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade</label></li>
+          </form>
         </ul>
         <button id="logOut">Log Out</button>
-        </form>
-
         `);
         $("input").on("click", function () {
+          $(this).parent().toggleClass('clicked');
           let inputValue = this.value;
           console.log(inputValue);
           getCheckedBoxes();
@@ -207,31 +208,32 @@ $(() => {
 
         let $tweetStream = $('.tweetStream');
 
-        function getTweets(title) {
-          title = title.split(",")[0];
-          console.log(title);
-          let tweets = $.get(`http://localhost:8000/api/tweets?q=${title}`)
-          .done(function(data) {
-            console.log(data);
-            let $tweetItems = $('.tweetItems');
-            data.statuses.forEach((tweet) => {
-              // console.log(tweet);
-              let itemHtml =
-
-              '<li class="stream-item">'+'<div class="tweet">'+'<a href="#">' +
-              '<img src="'+ tweet.user.profile_image_url +'" alt="User image goes here.">' +
-              '</a>' +
-              '<div class="content">' +
-              '<strong class="fullname">'+ tweet.user.name +'</strong>' +
-              '<span>&rlm;</span>' +
-              '<span>@</span><b>' + tweet.user.screen_name + '</b>' +
-              '&nbsp;&middot;&nbsp;' +
-              '<small class="time">' +
-              tweet.created_at +
-              '</small>' +
-              '<p>' + tweet.text +'</p>' +
-              '</div>' +
-              '</div>' +
+      function getTweets(title) {
+        title = title.split(",")[0];
+        console.log(title);
+        let tweets = $.get(`http://localhost:8000/api/tweets?q=${title}`)
+        .done(function(data) {
+          console.log(data);
+          let $tweetItems = $('.tweetItems');
+          data.statuses.forEach((tweet) => {
+            console.log(tweet.text);
+            let itemHtml =
+              '<li class="stream-item">'+
+                '<div class="tweet">'+
+                  '<div id="image">'+
+                    '<img src="'+ tweet.user.profile_image_url +'" alt="User image goes here.">' +
+                  '</div>' +
+                  '<div class="content">' +
+                    '<strong class="fullname">'+ tweet.user.name +'</strong>' +
+                    '<span>&rlm;</span>' +
+                    '<span>@</span><b>' + tweet.user.screen_name + '</b>' +
+                    '&nbsp;&middot;&nbsp;' +
+                    '<small>' +
+                      tweet.created_at +
+                    '</small>' +
+                    '<p>' + tweet.text +'</p>' +
+                  '</div>' +
+                '</div>' +
               '</li>'
               ;
               $tweetItems.append(itemHtml);
@@ -324,5 +326,5 @@ $(() => {
             setTimeout(function(){ map.setZoom(cnt); }, 150);
           }
         }
-
-      });
+      // }
+});
