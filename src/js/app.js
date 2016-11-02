@@ -97,7 +97,7 @@ $(() => {
     $sidebar.html(`
       <div class="formDiv">
       <div id="logInForm">
-      <form class="login" action="api/login" method="post" onchange="getCheckedBoxes()">
+      <form class="login" action="api/login" method="post">
       <label for="email"></label>
       <input type="text" name="email" placeholder="email" value="">
       <label for="password"></label>
