@@ -36,11 +36,11 @@ $(() => {
 
   //RESET MAP
   function resetMap() {
-      smoothZoomOut(map, 1, map.getZoom());
-      populateMap();
-      infoWindow.close();
-      infoWindow = undefined;
-    }
+    smoothZoomOut(map, 1, map.getZoom());
+    populateMap();
+    infoWindow.close();
+    infoWindow = undefined;
+  }
 
   //POPULATE MAP
   function populateMap() {
@@ -57,8 +57,8 @@ $(() => {
             map: map,
             radius: 500000,
             fillColor: '#ff00ff',
-             strokeWeight: 1,
-             strokeColor: '#ff00ff',
+            strokeWeight: 1,
+            strokeColor: '#ff00ff',
             category: disaster.categories[0].title
           });
           circles.push(circle);
@@ -167,23 +167,23 @@ $(() => {
       if (event) event.preventDefault();
       $sidebar.html(`
         <ul class="checkbox-grid">
-            <li><form class="filter" action="#" method="get">
-            <li><input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought</li>
-            <li><input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze</li>
-            <li><input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires</li>
-            <li><input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods</li>
-            <li><input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms</li>
-            <li><input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes</li>
-            <li><input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color</li>
-            <li><input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides</li>
-            <li><input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice</li>
-            <li><input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes</li>
-            <li><input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow</li>
-            <li><input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme</li>
-            <li><input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade</li>
-            </ul>
-            <button id="logOut">Log Out</button>
-            </form>
+        <li><form class="filter" action="#" method="get">
+        <li><input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought</li>
+        <li><input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze</li>
+        <li><input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires</li>
+        <li><input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods</li>
+        <li><input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms</li>
+        <li><input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes</li>
+        <li><input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color</li>
+        <li><input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides</li>
+        <li><input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice</li>
+        <li><input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes</li>
+        <li><input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow</li>
+        <li><input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme</li>
+        <li><input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade</li>
+        </ul>
+        <button id="logOut">Log Out</button>
+        </form>
 
         `);
         $("input").on("click", function () {
@@ -197,126 +197,132 @@ $(() => {
       function showTwitterForm() {
         if(event) event.preventDefault();
         $sidebar.html(`
+
           <div class="tweetStream">Tweets Div
-            <ul class="tweetItems">
-            </ul>
+          <ul class="tweetItems">
+          </ul>
           </div>
-        `);
-      }
+          `);
+        }
 
-      let $tweetStream = $('.tweetStream');
+        let $tweetStream = $('.tweetStream');
 
-      function getTweets(title) {
-        title = title.split(",")[0];
-        console.log(title);
-        let tweets = $.get(`http://localhost:8000/api/tweets?q=${title}`)
-        .done(function(data) {
-          console.log(data);
-          let $tweetItems = $('.tweetItems');
-          data.statuses.forEach((tweet) => {
-            // console.log(tweet);
-            let itemHtml =
+        function getTweets(title) {
+          title = title.split(",")[0];
+          console.log(title);
+          let tweets = $.get(`http://localhost:8000/api/tweets?q=${title}`)
+          .done(function(data) {
+            console.log(data);
+            let $tweetItems = $('.tweetItems');
+            data.statuses.forEach((tweet) => {
+              // console.log(tweet);
+              let itemHtml =
 
               '<li class="stream-item">'+'<div class="tweet">'+'<a href="#">' +
-                  '<img src="'+ tweet.user.profile_image_url +'" alt="User image goes here.">' +
-                  '</a>' +
-                '<div class="content">' +
-                   '<strong class="fullname">'+ tweet.user.name +'</strong>' +
-                   '<span>&rlm;</span>' +
-                   '<span>@</span><b>' + tweet.user.screen_name + '</b>' +
-                   '&nbsp;&middot;&nbsp;' +
-                   '<small class="time">' +
-                      tweet.created_at +
-                   '</small>' +
-                   '<p>' + tweet.text +'</p>' +
-                  '</div>' +
-                '</div>' +
+              '<img src="'+ tweet.user.profile_image_url +'" alt="User image goes here.">' +
+              '</a>' +
+              '<div class="content">' +
+              '<strong class="fullname">'+ tweet.user.name +'</strong>' +
+              '<span>&rlm;</span>' +
+              '<span>@</span><b>' + tweet.user.screen_name + '</b>' +
+              '&nbsp;&middot;&nbsp;' +
+              '<small class="time">' +
+              tweet.created_at +
+              '</small>' +
+              '<p>' + tweet.text +'</p>' +
+              '</div>' +
+              '</div>' +
               '</li>'
-            ;
-            $tweetItems.append(itemHtml);
+              ;
+              $tweetItems.append(itemHtml);
 
               // '<li>'+tweet.text+'</li>');
+            });
           });
-        });
-      }
+        }
 
-      //ADD INFO WINDOW
-      function addInfoWindowForDisaster(disaster, circle) {
-        google.maps.event.addListener(circle, "click", () => {
-          getTweets(disaster.title);
-          console.log(circle.category);
-          infoWindow = new google.maps.InfoWindow({
-            content: `
-            <h2>${disaster.title}</h2>
-            <h4>${disaster.geometries[0].date}</h4>
-            <a href="${disaster.sources[0].url}" target="_blank">More Information</a>
-            <button id="goBack">Go Back</button>`,
-            position: circle.center,
-          });
-          map.setCenter(circle.center);
-          map.panTo(circle.center);
-          smoothZoomIn(map, 8, map.getZoom());
-          circles.forEach((circle) => {
-            circle.setMap(null);
-          });
-          circles = [];
+        //ADD INFO WINDOW
+        function addInfoWindowForDisaster(disaster, circle) {
+          google.maps.event.addListener(circle, "click", () => {
+            getTweets(disaster.title);
+            console.log(circle.category);
+            console.log(disaster);
+            let date = new Date(disaster.geometries[0].date).toLocaleDateString("en-GB");
+            infoWindow = new google.maps.InfoWindow({
+              content: `
+              <div class="infoWindow">
+              <h2>${disaster.title}</h2>
+              <h5>${date}</h5>
+              <a class="button" href="${disaster.sources[0].url}" target="_blank">More Information</a>
+              <button id="goBack">Go Back</button>
+              </div>
+              `,
+              position: circle.center,
+            });
+            map.setCenter(circle.center);
+            map.panTo(circle.center);
+            smoothZoomIn(map, 8, map.getZoom());
+            circles.forEach((circle) => {
+              circle.setMap(null);
+            });
+            circles = [];
             setTimeout(() =>{
               infoWindow.open(map, circle);
             }, 1500);
             showTwitterForm();
-      });
-    }
-
-      //FILTERING FUNCTIONALITY
-      function getCheckedBoxes () {
-        console.log("change");
-        let checkBoxes = $(".checkBox");
-        checkBoxesChecked = [];
-        for (var i=0; i<checkBoxes.length; i++) {
-          if (checkBoxes[i].checked) {
-            checkBoxesChecked.push(checkBoxes[i].defaultValue);
-          }
+          });
         }
-        console.log(checkBoxesChecked);
-        filterCategories();
-      }
 
-      function filterCategories () {
-        for(var i=0; i<circles.length; i++) {
-          if((checkBoxesChecked.indexOf(circles[i].category)) > -1) {
+        //FILTERING FUNCTIONALITY
+        function getCheckedBoxes () {
+          console.log("change");
+          let checkBoxes = $(".checkBox");
+          checkBoxesChecked = [];
+          for (var i=0; i<checkBoxes.length; i++) {
+            if (checkBoxes[i].checked) {
+              checkBoxesChecked.push(checkBoxes[i].defaultValue);
+            }
+          }
+          console.log(checkBoxesChecked);
+          filterCategories();
+        }
+
+        function filterCategories () {
+          for(var i=0; i<circles.length; i++) {
+            if((checkBoxesChecked.indexOf(circles[i].category)) > -1) {
               circles[i].setVisible(true);
-          } else {
+            } else {
               circles[i].setVisible(false);
+            }
           }
         }
-      }
 
-      //ZOOM-FUNCTIONS
-      //http://stackoverflow.com/questions/4752340/how-to-zoom-in-smoothly-on-a-marker-in-google-maps
-      function smoothZoomIn (map, max, cnt) {
-        if (cnt >= max) {
-          return;
+        //ZOOM-FUNCTIONS
+        //http://stackoverflow.com/questions/4752340/how-to-zoom-in-smoothly-on-a-marker-in-google-maps
+        function smoothZoomIn (map, max, cnt) {
+          if (cnt >= max) {
+            return;
+          }
+          else {
+            let z = google.maps.event.addListener(map, 'zoom_changed', function(event){
+              google.maps.event.removeListener(z);
+              smoothZoomIn(map, max, cnt + 1);
+            });
+            setTimeout(function(){ map.setZoom(cnt); }, 150);
+          }
         }
-        else {
-          let z = google.maps.event.addListener(map, 'zoom_changed', function(event){
-            google.maps.event.removeListener(z);
-            smoothZoomIn(map, max, cnt + 1);
-          });
-          setTimeout(function(){ map.setZoom(cnt); }, 150);
-        }
-      }
 
-      function smoothZoomOut (map, min, cnt) {
-        if (cnt <= min) {
-          return;
+        function smoothZoomOut (map, min, cnt) {
+          if (cnt <= min) {
+            return;
+          }
+          else {
+            let z = google.maps.event.addListener(map, 'zoom_changed', function(event){
+              google.maps.event.removeListener(z);
+              smoothZoomOut(map, min, cnt - 1);
+            });
+            setTimeout(function(){ map.setZoom(cnt); }, 150);
+          }
         }
-        else {
-          let z = google.maps.event.addListener(map, 'zoom_changed', function(event){
-            google.maps.event.removeListener(z);
-            smoothZoomOut(map, min, cnt - 1);
-          });
-          setTimeout(function(){ map.setZoom(cnt); }, 150);
-        }
-      }
 
-});
+      });

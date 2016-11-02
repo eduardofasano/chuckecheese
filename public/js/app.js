@@ -142,7 +142,7 @@ $(function () {
   //CREATE FILTER FORM
   function showFilterForm() {
     if (event) event.preventDefault();
-    $sidebar.html('\n        <ul class="checkbox-grid">\n            <li><form class="filter" action="#" method="get">\n            <li><input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought</li>\n            <li><input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze</li>\n            <li><input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires</li>\n            <li><input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods</li>\n            <li><input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms</li>\n            <li><input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes</li>\n            <li><input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color</li>\n            <li><input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides</li>\n            <li><input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice</li>\n            <li><input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes</li>\n            <li><input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow</li>\n            <li><input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme</li>\n            <li><input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade</li>\n            </ul>\n            <button id="logOut">Log Out</button>\n            </form>\n\n        ');
+    $sidebar.html('\n        <ul class="checkbox-grid">\n        <li><form class="filter" action="#" method="get">\n        <li><input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought</li>\n        <li><input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze</li>\n        <li><input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires</li>\n        <li><input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods</li>\n        <li><input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms</li>\n        <li><input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes</li>\n        <li><input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color</li>\n        <li><input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides</li>\n        <li><input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice</li>\n        <li><input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes</li>\n        <li><input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow</li>\n        <li><input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme</li>\n        <li><input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade</li>\n        </ul>\n        <button id="logOut">Log Out</button>\n        </form>\n\n        ');
     $("input").on("click", function () {
       var inputValue = this.value;
       console.log(inputValue);
@@ -153,7 +153,7 @@ $(function () {
   //TWITTER FUNCTIONALITY
   function showTwitterForm() {
     if (event) event.preventDefault();
-    $sidebar.html('\n          <div class="tweetStream">Tweets Div\n            <ul class="tweetItems">\n            </ul>\n          </div>\n        ');
+    $sidebar.html('\n\n          <div class="tweetStream">Tweets Div\n          <ul class="tweetItems">\n          </ul>\n          </div>\n          ');
   }
 
   var $tweetStream = $('.tweetStream');
@@ -179,8 +179,10 @@ $(function () {
     google.maps.event.addListener(circle, "click", function () {
       getTweets(disaster.title);
       console.log(circle.category);
+      console.log(disaster);
+      var date = new Date(disaster.geometries[0].date).toLocaleDateString("en-GB");
       infoWindow = new google.maps.InfoWindow({
-        content: '\n            <h2>' + disaster.title + '</h2>\n            <h4>' + disaster.geometries[0].date + '</h4>\n            <a href="' + disaster.sources[0].url + '" target="_blank">More Information</a>\n            <button id="goBack">Go Back</button>',
+        content: '\n              <div class="infoWindow">\n              <h2>' + disaster.title + '</h2>\n              <h5>' + date + '</h5>\n              <a class="button" href="' + disaster.sources[0].url + '" target="_blank">More Information</a>\n              <button id="goBack">Go Back</button>\n              </div>\n              ',
         position: circle.center
       });
       map.setCenter(circle.center);
