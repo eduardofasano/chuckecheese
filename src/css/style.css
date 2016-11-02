@@ -31,7 +31,6 @@ input.button {
    margin: auto;
 }
 
-
 .logo {
   height: 80px;
   margin: auto;
@@ -86,12 +85,18 @@ input.checkBox {
 .labelStyle {
   border: 1px solid lightgrey;
   border-radius: 3px;
+  cursor: pointer;
 
   margin-left: 20px;
 
   color: grey;
   font-family: 'Raleway', sans-serif;
   font-weight: lighter;
+}
+
+.labelStyle.disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 
 .clicked {

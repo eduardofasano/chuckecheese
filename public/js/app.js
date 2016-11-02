@@ -11,23 +11,23 @@ $(function () {
   var map = new google.maps.Map($mapDiv[0], {
     center: { lat: 42.77509, lng: 13.01239 },
     zoom: 4,
-    styles: [{ "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "saturation": 36 }, { "color": "#333333" }, { "lightness": 40 }] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "visibility": "on" }, { "color": "#ffffff" }, { "lightness": 16 }] }, { "featureType": "all", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, { "featureType": "administrative", "elementType": "geometry.fill", "stylers": [{ "color": "#fefefe" }, { "lightness": 20 }] }, { "featureType": "administrative", "elementType": "geometry.stroke", "stylers": [{ "color": "#fefefe" }, { "lightness": 17 }, { "weight": 1.2 }] }, { "featureType": "administrative.country", "elementType": "geometry.stroke", "stylers": [{ "weight": "0.94" }, { "visibility": "on" }] }, { "featureType": "administrative.province", "elementType": "geometry.stroke", "stylers": [{ "visibility": "on" }] }, { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "color": "#f5f5f5" }, { "lightness": 20 }] }, { "featureType": "poi", "elementType": "geometry", "stylers": [{ "color": "#f5f5f5" }, { "lightness": 21 }] }, { "featureType": "poi.park", "elementType": "geometry", "stylers": [{ "color": "#dedede" }, { "lightness": 21 }] }, { "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [{ "color": "#ffffff" }, { "lightness": 17 }] }, { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#ffffff" }, { "lightness": 29 }, { "weight": 0.2 }] }, { "featureType": "road.arterial", "elementType": "geometry", "stylers": [{ "color": "#ffffff" }, { "lightness": 18 }] }, { "featureType": "road.local", "elementType": "geometry", "stylers": [{ "color": "#ffffff" }, { "lightness": 16 }] }, { "featureType": "transit", "elementType": "geometry", "stylers": [{ "color": "#f2f2f2" }, { "lightness": 19 }] }, { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#e9e9e9" }, { "lightness": 17 }] }]
+    styles: [{ "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "color": "#000000" }] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "color": "#ffffff" }] }, { "featureType": "administrative.province", "elementType": "all", "stylers": [{ "visibility": "on" }] }, { "featureType": "landscape", "elementType": "all", "stylers": [{ "saturation": "-39" }, { "lightness": "35" }, { "gamma": "1.08" }] }, { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "saturation": "0" }] }, { "featureType": "landscape.man_made", "elementType": "all", "stylers": [{ "saturation": "-100" }, { "lightness": "10" }] }, { "featureType": "landscape.man_made", "elementType": "geometry.stroke", "stylers": [{ "saturation": "-100" }, { "lightness": "-14" }] }, { "featureType": "poi", "elementType": "all", "stylers": [{ "saturation": "-100" }, { "lightness": "10" }, { "gamma": "2.26" }] }, { "featureType": "poi", "elementType": "labels.text", "stylers": [{ "saturation": "-100" }, { "lightness": "-3" }] }, { "featureType": "road", "elementType": "all", "stylers": [{ "saturation": "-100" }, { "lightness": "54" }] }, { "featureType": "road", "elementType": "geometry.stroke", "stylers": [{ "saturation": "-100" }, { "lightness": "-7" }] }, { "featureType": "road.arterial", "elementType": "all", "stylers": [{ "saturation": "-100" }] }, { "featureType": "road.local", "elementType": "all", "stylers": [{ "saturation": "-100" }, { "lightness": "-2" }] }, { "featureType": "transit", "elementType": "all", "stylers": [{ "saturation": "-100" }] }, { "featureType": "water", "elementType": "geometry.fill", "stylers": [{ "saturation": "-100" }, { "lightness": "100" }] }, { "featureType": "water", "elementType": "geometry.stroke", "stylers": [{ "saturation": "-100" }, { "lightness": "-100" }] }]
   });
 
   var colorPalette = {
-    "Drought": "#e3a744",
+    "Drought": "#88b086",
     "Dust And Haze": "#e9dab1",
     "Wildfires": "#d25566",
     "Floods": "#79b4e5",
     "Severe Storms": "#a4dddc",
-    "Volcanoes": "#88b086",
+    "Volcanoes": "#e3a744",
     "Water Color": "#bbe2b8",
     "Landslides": "#f1c7d9",
     "Sea Lake Ice": "#d686d8",
     "Earthquakes": "#d5bae5",
     "Snow": "#d98f91",
-    "Temperature Extremes": "#8a88e5",
-    "Manmade": "#f3f58c"
+    "Temperature Extremes": "#f3f58c",
+    "Manmade": "#8a88e5"
   };
 
   //CURRENT POSITION
@@ -79,6 +79,7 @@ $(function () {
               fillColor: colorPalette[category],
               strokeWeight: 1,
               strokeColor: colorPalette[category],
+              fillOpacity: 0.4,
               category: disaster.categories[0].title
             });
             circles.push(circle);
@@ -92,6 +93,7 @@ $(function () {
             fillColor: colorPalette[category],
             strokeWeight: 1,
             strokeColor: colorPalette[category],
+            fillOpacity: 0.4,
             category: disaster.categories[0].title
           });
           circles.push(circle);
@@ -182,6 +184,7 @@ $(function () {
       }
       if (categoriesOnBoard.indexOf(inputs[i].defaultValue) < 0) {
         inputs[i].setAttribute("disabled", true);
+        inputs[i].parentElement.className = "labelStyle clicked disabled";
       }
     }
   }
