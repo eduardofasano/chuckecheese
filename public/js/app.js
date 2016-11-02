@@ -155,7 +155,10 @@ $(function () {
   var $tweetStream = $('.tweetStream');
 
   function getTweets(title) {
+    title = title.split(",")[0];
+    console.log(title);
     var tweets = $.get('http://localhost:8000/api/tweets?q=' + title).done(function (data) {
+      console.log(data);
       var $tweetItems = $('.tweetItems');
       data.statuses.forEach(function (tweet) {
         // console.log(tweet);
