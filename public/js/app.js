@@ -13,6 +13,22 @@ $(function () {
     zoom: 4
   });
 
+  var colorPalette = {
+    "Drought": "#e3a744",
+    "Dust And Haze": "#e9dab1",
+    "Wildfires": "#d25566",
+    "Floods": "#79b4e5",
+    "Severe Storms": "#a4dddc",
+    "Volcanoes": "#88b086",
+    "Water Color": "#bbe2b8",
+    "Landslides": "#f1c7d9",
+    "Sea Lake Ice": "#d686d8",
+    "Earthquakes": "#d5bae5",
+    "Snow": "#d98f91",
+    "Temperature Extremes": "#8a88e5",
+    "Manmade": "#f3f58c"
+  };
+
   //CURRENT POSITION
   var currentPosition = navigator.geolocation.getCurrentPosition(function (position) {
     var latLng = {
@@ -48,6 +64,7 @@ $(function () {
   function populateMap() {
     var getEvents = $.get('http://eonet.sci.gsfc.nasa.gov/api/v2/events').done(function (data) {
       data.events.forEach(function (disaster) {
+        var category = disaster.categories[0].title;
         if (disaster.geometries[0].coordinates[0] instanceof Array) {
           (function () {
             var bounds = new google.maps.LatLngBounds();
@@ -58,11 +75,12 @@ $(function () {
               center: bounds.getCenter(),
               map: map,
               radius: 500000,
-              fillColor: '#ff00ff',
+              fillColor: colorPalette[category],
               strokeWeight: 1,
-              strokeColor: '#ff00ff',
+              strokeColor: colorPalette[category],
               category: disaster.categories[0].title
             });
+            console.log(colorPalette[category]);
             circles.push(circle);
             addInfoWindowForDisaster(disaster, circle);
           })();
@@ -71,9 +89,9 @@ $(function () {
             center: new google.maps.LatLng(disaster.geometries[0].coordinates[1], disaster.geometries[0].coordinates[0]),
             map: map,
             radius: 500000,
-            fillColor: '#0000ff',
+            fillColor: colorPalette[category],
             strokeWeight: 1,
-            strokeColor: '#0000ff',
+            strokeColor: colorPalette[category],
             category: disaster.categories[0].title
           });
           circles.push(circle);
@@ -220,6 +238,20 @@ $(function () {
       }
     }
   }
+
+  //   //COLOR MATCHING FUNCTIONALITY
+  //   function colorMatching () {
+  //     console.log(Object.keys(colorPalette));
+  //   }
+  //   // fillColor: '#ff00ff'
+  //   function colorMatching () {
+  //     for(var i=0; i<circles.length; i++) {
+  //     if (circles[i].category === colorPalette[i]) {
+  //       circles[i].fillColor:
+  //     }
+  //       console.log(colorPalette[0]);
+  //     }
+  // }
 
   //ZOOM-FUNCTIONS
   //http://stackoverflow.com/questions/4752340/how-to-zoom-in-smoothly-on-a-marker-in-google-maps
