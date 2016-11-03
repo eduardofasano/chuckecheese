@@ -65,7 +65,7 @@ $(() => {
 
   //POPULATE MAP
   function populateMap() {
-    let getEvents = $.get('http://eonet.sci.gsfc.nasa.gov/api/v2/events')
+    let getEvents = $.get('https://eonet.sci.gsfc.nasa.gov/api/v2/events')
       .done(function(data) {
       data.events.forEach((disaster) => {
         let category = disaster.categories[0].title;
@@ -226,7 +226,6 @@ $(() => {
     $("input").on("click", function () {
       $(this).parent().toggleClass('clicked');
       let inputValue = this.value;
-      console.log(inputValue);
       getCheckedBoxes();
     });
   }
