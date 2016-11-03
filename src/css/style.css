@@ -147,7 +147,6 @@ input.checkBox {
   border-radius: 3px;
   cursor: pointer;
   padding-top: 5px;
-  color: #595959;
   font-family: 'Raleway', sans-serif;
   width: 100%;
 }
@@ -207,6 +206,8 @@ input.checkBox {
 .labelStyle.disabled {
   opacity: 0.5;
   cursor: default;
+  color: #595959;
+  background-color: #f5f5f5!important;
 }
 
 .clicked {

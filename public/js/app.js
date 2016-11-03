@@ -180,19 +180,21 @@ $(function () {
 
   //INPUT BOX FUNCTIONALITY
   function setBoxStatus() {
-    var inputs = $(".checkBox");
+    var $inputs = $(".checkBox");
     var categoriesOnBoard = [];
-    for (var i = 0; i < inputs.length; i++) {
-      var category = circles[i].category;
-      if (categoriesOnBoard.indexOf(category) < 0) {
+    circles.forEach(function (circle, i) {
+      var category = circle.category;
+      if (categoriesOnBoard.indexOf(category) === -1) {
         categoriesOnBoard.push(category);
-        console.log(categoriesOnBoard);
       }
-      if (categoriesOnBoard.indexOf(inputs[i].defaultValue) < 0) {
-        inputs[i].setAttribute("disabled", true);
-        inputs[i].parentElement.className = "labelStyle clicked disabled";
+    });
+
+    $inputs.each(function (i, input) {
+      var $input = $(input);
+      if (categoriesOnBoard.indexOf($input.val()) === -1) {
+        $input.prop('disabled', true).parent().addClass('disabled');
       }
-    }
+    });
   }
 
   //TWITTER FUNCTIONALITY
@@ -303,7 +305,7 @@ $(function () {
   function smoothZoomOut(map, min, cnt) {
     if (cnt < min) {
       setTimeout(function () {
-        map.panTo({ lat: 20, lng: 0 });
+        map.panTo({ lat: 20, lng: map.getCenter().lng() });
       }, 150);
       return;
     } else {
