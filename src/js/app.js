@@ -7,13 +7,14 @@ $(() => {
   let $container = $('#container');
   let $mapDiv = $('#map');
   let map = new google.maps.Map($mapDiv[0], {
-    center: { lat: 42.77509, lng: 13.01239 },
-    zoom: 4,
+    center: { lat: 20, lng: 0 },
+    zoom: 3,
+    minZoom: 3,
+    disableDefaultUI: true,
     styles: [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#000000"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]},{"featureType":"administrative.province","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"landscape","elementType":"all","stylers":[{"saturation":"-39"},{"lightness":"35"},{"gamma":"1.08"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"saturation":"0"}]},{"featureType":"landscape.man_made","elementType":"all","stylers":[{"saturation":"-100"},{"lightness":"10"}]},{"featureType":"landscape.man_made","elementType":"geometry.stroke","stylers":[{"saturation":"-100"},{"lightness":"-14"}]},{"featureType":"poi","elementType":"all","stylers":[{"saturation":"-100"},{"lightness":"10"},{"gamma":"2.26"}]},{"featureType":"poi","elementType":"labels.text","stylers":[{"saturation":"-100"},{"lightness":"-3"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":"-100"},{"lightness":"54"}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"saturation":"-100"},{"lightness":"-7"}]},{"featureType":"road.arterial","elementType":"all","stylers":[{"saturation":"-100"}]},{"featureType":"road.local","elementType":"all","stylers":[{"saturation":"-100"},{"lightness":"-2"}]},{"featureType":"transit","elementType":"all","stylers":[{"saturation":"-100"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"saturation":"-100"},{"lightness":"100"}]},{"featureType":"water","elementType":"geometry.stroke","stylers":[{"saturation":"-100"},{"lightness":"-100"}]}]
   });
 
-  let colorPalette =
-  {
+  let colorPalette = {
     "Drought": "#88b086",
     "Dust And Haze": "#e9dab1",
     "Wildfires": "#d25566",
@@ -33,20 +34,22 @@ $(() => {
   let currentPosition = navigator.geolocation.getCurrentPosition((position) => {
     let latLng = {
       lat: position.coords.latitude,
-      lng:position.coords.longitude
+      lng: position.coords.longitude
     };
-    map.panTo(latLng);
+    // map.panTo(latLng);
 
-    let maker = new google.maps.Marker({
+    let marker = new google.maps.Marker({
       position: latLng,
       animation: google.maps.Animation.DROP,
       draggable: true,
+      icon: "../images/green-pin.png",
       map
     });
   });
 
   //GO BACK
   $mapDiv.on('click', '#goBack', goBack);
+
   function goBack() {
     resetMap();
     showFilterForm();
@@ -54,7 +57,7 @@ $(() => {
 
   //RESET MAP
   function resetMap() {
-    smoothZoomOut(map, 1, map.getZoom());
+    smoothZoomOut(map, 3, map.getZoom());
     populateMap();
     infoWindow.close();
     infoWindow = undefined;
@@ -66,7 +69,7 @@ $(() => {
     .done(function(data) {
       data.events.forEach((disaster) => {
         let category = disaster.categories[0].title;
-        if(disaster.geometries[0].coordinates[0] instanceof Array) {
+        if (disaster.geometries[0].coordinates[0] instanceof Array) {
           let bounds = new google.maps.LatLngBounds();
           disaster.geometries[0].coordinates.forEach((coords) => {
             bounds.extend(new google.maps.LatLng(coords[1], coords[0]));
@@ -81,6 +84,7 @@ $(() => {
             fillOpacity: 0.4,
             category: disaster.categories[0].title
           });
+          $(circle).fadeIn(1000);
           circles.push(circle);
           addInfoWindowForDisaster(disaster, circle);
         } else {
@@ -94,6 +98,7 @@ $(() => {
             fillOpacity: 0.4,
             category: disaster.categories[0].title
           });
+          $(circle).fadeIn(1000);
           circles.push(circle);
           addInfoWindowForDisaster(disaster, circle);
         }
@@ -107,7 +112,7 @@ $(() => {
     return !!localStorage.getItem('token');
   }
 
-  if(isLoggedIn()) {
+  if (isLoggedIn()) {
     showFilterForm();
     populateMap();
   } else {
@@ -148,7 +153,6 @@ $(() => {
           <p class="powered">Powered by</p><img src="images/nasa.png" id="nasa">
         </form>
       </div>
-
     </div>
     `);
   }
@@ -256,124 +260,141 @@ $(() => {
     `);
   }
 
+
   let $tweetStream = $('.tweetStream');
 
   function getTweets(title) {
-    title = title.split(",")[0];
-    console.log(title);
+    console.log("Title", title);
     let tweets = $.get(`http://localhost:8000/api/tweets?q=${title}`)
-    .done(function(data) {
-      console.log(data);
-      let $tweetItems = $('.tweetItems');
-      data.statuses.forEach((tweet) => {
-        console.log(tweet.text);
-        let itemHtml =
+    .done((data) => {
+      if(data.statuses.length === 0) {
+          // Truncate the title
+          title = title.split(",")[0];
+          console.log("Truncated Title: ", title);
+          tweets = $.get(`http://localhost:8000/api/tweets?q=${title}`).done((dataTweets) => {
+            console.log("dt", dataTweets);
+            appendTweet(title, dataTweets);
+          }).fail((err)=> {console.log("Somethigng went wrong", err);});
+
+      } else {
+        appendTweet(title, data);
+      }
+    });
+  }
+
+  function appendTweet(title, data){
+    console.log(title);
+    let $tweetItems = $('.tweetItems');
+    data.statuses.forEach((tweet) => {
+      let tweetTime = (tweet.created_at.split(" +0000")[0])+(tweet.created_at.split(" +0000")[1]);
+      let itemHtml =
         '<li class="stream-item">'+
           '<div class="tweet">'+
             '<div id="image">'+
               '<img src="'+ tweet.user.profile_image_url +'" alt="User image goes here.">' +
-              '</div>' +
-              '<div class="content">' +
-                '<strong class="fullname">'+ tweet.user.name +'</strong>' +
-                '<span>&rlm;</span>' +
-                '<span>@</span><b>' + tweet.user.screen_name + '</b>' +
-                '&nbsp;&middot;&nbsp;' +
-                '<small>' +
-                  tweet.created_at +
-                  '</small>' +
-                  '<p>' + tweet.text +'</p>' +
-                  '</div>' +
-                  '</div>' +
-                  '</li>'
-                  ;
-                  $tweetItems.append(itemHtml);
+            '</div>' +
+            '<div class="content">' +
+              '<strong class="fullname">'+ tweet.user.name +'</strong>' +
+              '<span>&rlm;</span>' +
+              '<span>@</span><b>' + tweet.user.screen_name + '</b>' +
+              '&nbsp;&middot;&nbsp;' +
+              '<small>' +
+                tweetTime +
+              '</small>' +
+              '<p>' + tweet.text +'</p>' +
+            '</div>' +
+          '</li>';
+      $tweetItems.append(itemHtml);
+            // '<li>'+tweet.text+'</li>');
+    });
+  }
 
-                  // '<li>'+tweet.text+'</li>');
-                });
-              });
-            }
+  //ADD INFO WINDOW
+  function addInfoWindowForDisaster(disaster, circle) {
+    google.maps.event.addListener(circle, "click", () => {
+      getTweets(disaster.title);
+      console.log(circle.category);
+      console.log(disaster);
+      let date = new Date(disaster.geometries[0].date).toLocaleDateString("en-GB");
+      infoWindow = new google.maps.InfoWindow({
+        content: `
+        <div class="infoWindow">
+          <h2>${disaster.title}</h2>
+          <h5>${date}</h5>
+          <a class="button" href="${disaster.sources[0].url}" target="_blank">More Information</a>
+          <button id="goBack">Go Back</button>
+        </div>
+        `,
+        position: circle.center,
+      });
+      map.setCenter(circle.center);
+      map.panTo(circle.center);
+      smoothZoomIn(map, 8, map.getZoom());
+      circles.forEach((circle) => {
+        circle.setMap(null);
+      });
+      circles = [];
+      setTimeout(() =>{
+        infoWindow.open(map, circle);
+      }, 1500);
+      showTwitterForm();
+    });
+  }
 
-            //ADD INFO WINDOW
-            function addInfoWindowForDisaster(disaster, circle) {
-              google.maps.event.addListener(circle, "click", () => {
-                getTweets(disaster.title);
-                console.log(circle.category);
-                console.log(disaster);
-                let date = new Date(disaster.geometries[0].date).toLocaleDateString("en-GB");
-                infoWindow = new google.maps.InfoWindow({
-                  content: `
-                  <div class="infoWindow">
-                    <h2>${disaster.title}</h2>
-                    <h5>${date}</h5>
-                    <a class="button" href="${disaster.sources[0].url}" target="_blank">More Information</a>
-                    <button id="goBack">Go Back</button>
-                  </div>
-                  `,
-                  position: circle.center,
-                });
-                map.setCenter(circle.center);
-                map.panTo(circle.center);
-                smoothZoomIn(map, 8, map.getZoom());
-                circles.forEach((circle) => {
-                  circle.setMap(null);
-                });
-                circles = [];
-                setTimeout(() =>{
-                  infoWindow.open(map, circle);
-                }, 1500);
-                showTwitterForm();
-              });
-            }
+  //FILTERING FUNCTIONALITY
+  function getCheckedBoxes () {
+    console.log("change");
+    let checkBoxes = $(".checkBox");
+    checkBoxesChecked = [];
+    for (var i=0; i<checkBoxes.length; i++) {
+      if (checkBoxes[i].checked) {
+        checkBoxesChecked.push(checkBoxes[i].defaultValue);
+      }
+    }
+    console.log(checkBoxesChecked);
+    filterCategories();
+  }
 
-            //FILTERING FUNCTIONALITY
-            function getCheckedBoxes () {
-              console.log("change");
-              let checkBoxes = $(".checkBox");
-              checkBoxesChecked = [];
-              for (var i=0; i<checkBoxes.length; i++) {
-                if (checkBoxes[i].checked) {
-                  checkBoxesChecked.push(checkBoxes[i].defaultValue);
-                }
-              }
-              console.log(checkBoxesChecked);
-              filterCategories();
-            }
+  function filterCategories () {
+    for(var i=0; i<circles.length; i++) {
+      if((checkBoxesChecked.indexOf(circles[i].category)) > -1) {
+        circles[i].setVisible(true);
+      } else {
+        circles[i].setVisible(false);
+      }
+    }
+  }
 
-            function filterCategories () {
-              for(var i=0; i<circles.length; i++) {
-                if((checkBoxesChecked.indexOf(circles[i].category)) > -1) {
-                  circles[i].setVisible(true);
-                } else {
-                  circles[i].setVisible(false);
-                }
-              }
-            }
+  //ZOOM-FUNCTIONS
+  //http://stackoverflow.com/questions/4752340/how-to-zoom-in-smoothly-on-a-marker-in-google-maps
+  function smoothZoomIn(map, max, cnt) {
+    if (cnt >= max) {
+      return;
+    } else {
+      let z = google.maps.event.addListener(map, 'zoom_changed', function(event) {
+        google.maps.event.removeListener(z);
+        smoothZoomIn(map, max, cnt + 1);
+      });
+      setTimeout(function() {
+        map.setZoom(cnt);
+      }, 150);
+    }
+  }
 
-            //ZOOM-FUNCTIONS
-            //http://stackoverflow.com/questions/4752340/how-to-zoom-in-smoothly-on-a-marker-in-google-maps
-            function smoothZoomIn (map, max, cnt) {
-              if (cnt >= max) {
-                return;
-              }
-              else {
-                let z = google.maps.event.addListener(map, 'zoom_changed', function(event){
-                  google.maps.event.removeListener(z);
-                  smoothZoomIn(map, max, cnt + 1);
-                });
-                setTimeout(function(){ map.setZoom(cnt); }, 150);
-              }
-            }
-
-            function smoothZoomOut (map, min, cnt) {
-              if (cnt <= min) {
-                return;
-              }
-              else {
-                let z = google.maps.event.addListener(map, 'zoom_changed', function(event){
-                  google.maps.event.removeListener(z);
-                  smoothZoomOut(map, min, cnt - 1);
-                });
-                setTimeout(function(){ map.setZoom(cnt); }, 150);
-              }
-            }
-          });
+  function smoothZoomOut(map, min, cnt) {
+    if (cnt < min) {
+      setTimeout(function() {
+        map.panTo({ lat: 20, lng: 0 });
+      }, 150);
+      return;
+    } else {
+      let z = google.maps.event.addListener(map, 'zoom_changed', function(event) {
+        google.maps.event.removeListener(z);
+        smoothZoomOut(map, min, cnt - 1);
+      });
+      setTimeout(function() {
+        map.setZoom(cnt);
+      }, 150);
+    }
+  }
+});

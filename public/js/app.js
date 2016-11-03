@@ -9,8 +9,10 @@ $(function () {
   var $container = $('#container');
   var $mapDiv = $('#map');
   var map = new google.maps.Map($mapDiv[0], {
-    center: { lat: 42.77509, lng: 13.01239 },
-    zoom: 4,
+    center: { lat: 20, lng: 0 },
+    zoom: 3,
+    minZoom: 3,
+    disableDefaultUI: true,
     styles: [{ "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "color": "#000000" }] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "color": "#ffffff" }] }, { "featureType": "administrative.province", "elementType": "all", "stylers": [{ "visibility": "on" }] }, { "featureType": "landscape", "elementType": "all", "stylers": [{ "saturation": "-39" }, { "lightness": "35" }, { "gamma": "1.08" }] }, { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "saturation": "0" }] }, { "featureType": "landscape.man_made", "elementType": "all", "stylers": [{ "saturation": "-100" }, { "lightness": "10" }] }, { "featureType": "landscape.man_made", "elementType": "geometry.stroke", "stylers": [{ "saturation": "-100" }, { "lightness": "-14" }] }, { "featureType": "poi", "elementType": "all", "stylers": [{ "saturation": "-100" }, { "lightness": "10" }, { "gamma": "2.26" }] }, { "featureType": "poi", "elementType": "labels.text", "stylers": [{ "saturation": "-100" }, { "lightness": "-3" }] }, { "featureType": "road", "elementType": "all", "stylers": [{ "saturation": "-100" }, { "lightness": "54" }] }, { "featureType": "road", "elementType": "geometry.stroke", "stylers": [{ "saturation": "-100" }, { "lightness": "-7" }] }, { "featureType": "road.arterial", "elementType": "all", "stylers": [{ "saturation": "-100" }] }, { "featureType": "road.local", "elementType": "all", "stylers": [{ "saturation": "-100" }, { "lightness": "-2" }] }, { "featureType": "transit", "elementType": "all", "stylers": [{ "saturation": "-100" }] }, { "featureType": "water", "elementType": "geometry.fill", "stylers": [{ "saturation": "-100" }, { "lightness": "100" }] }, { "featureType": "water", "elementType": "geometry.stroke", "stylers": [{ "saturation": "-100" }, { "lightness": "-100" }] }]
   });
 
@@ -36,18 +38,20 @@ $(function () {
       lat: position.coords.latitude,
       lng: position.coords.longitude
     };
-    map.panTo(latLng);
+    // map.panTo(latLng);
 
-    var maker = new google.maps.Marker({
+    var marker = new google.maps.Marker({
       position: latLng,
       animation: google.maps.Animation.DROP,
       draggable: true,
+      icon: "../images/green-pin.png",
       map: map
     });
   });
 
   //GO BACK
   $mapDiv.on('click', '#goBack', goBack);
+
   function goBack() {
     resetMap();
     showFilterForm();
@@ -55,7 +59,7 @@ $(function () {
 
   //RESET MAP
   function resetMap() {
-    smoothZoomOut(map, 1, map.getZoom());
+    smoothZoomOut(map, 3, map.getZoom());
     populateMap();
     infoWindow.close();
     infoWindow = undefined;
@@ -82,6 +86,7 @@ $(function () {
               fillOpacity: 0.4,
               category: disaster.categories[0].title
             });
+            $(circle).fadeIn(1000);
             circles.push(circle);
             addInfoWindowForDisaster(disaster, circle);
           })();
@@ -96,6 +101,7 @@ $(function () {
             fillOpacity: 0.4,
             category: disaster.categories[0].title
           });
+          $(circle).fadeIn(1000);
           circles.push(circle);
           addInfoWindowForDisaster(disaster, circle);
         }
@@ -118,7 +124,7 @@ $(function () {
 
   function showLoginForm() {
     if (event) event.preventDefault();
-    $sidebar.html('\n    <div class="formDiv">\n      <h1 class="dsquark">DISASTER SQUAWK</h1>\n      <p class="strapline">Learn about the worlds disasters in real time.</p>\n\n      <div id="logInForm">\n      <p class="ourUsers">Log in...</p><br>\n        <form class="login" action="api/login" method="post">\n          <label for="email"></label>\n          <input type="text" name="email" placeholder="email" value="">\n          <label for="password"></label>\n          <input type="password" name="password" placeholder="password" value=""><br>\n          <input type="submit" name="Log in" value="Log in" class=\'button\'><br>\n        </form>\n      </div>\n\n\n      <div id="registerForm">\n      <p class="ourUsers">New users...</p><br>\n        <form class="register" action="api/register" method="post">\n          <label for="username"></label>\n          <input type="text" name="username" placeholder="username" value="">\n          <label for="email"></label>\n          <input type="text" name="email" placeholder="email" value="">\n          <label for="password"></label>\n          <input type="password" name="password" placeholder="password" value="">\n          <label for="passwordConfirmation"></label>\n          <input type="password" name="passwordConfirmation" placeholder="password confirmation" value=""><br>\n          <input type="submit" name="register" value="Register" class=\'button\'><br><br>\n          <p class="powered">Powered by</p><img src="images/nasa.png" id="nasa">\n        </form>\n      </div>\n\n    </div>\n    ');
+    $sidebar.html('\n    <div class="formDiv">\n      <h1 class="dsquark">DISASTER SQUAWK</h1>\n      <p class="strapline">Learn about the worlds disasters in real time.</p>\n\n      <div id="logInForm">\n      <p class="ourUsers">Log in...</p><br>\n        <form class="login" action="api/login" method="post">\n          <label for="email"></label>\n          <input type="text" name="email" placeholder="email" value="">\n          <label for="password"></label>\n          <input type="password" name="password" placeholder="password" value=""><br>\n          <input type="submit" name="Log in" value="Log in" class=\'button\'><br>\n        </form>\n      </div>\n\n\n      <div id="registerForm">\n      <p class="ourUsers">New users...</p><br>\n        <form class="register" action="api/register" method="post">\n          <label for="username"></label>\n          <input type="text" name="username" placeholder="username" value="">\n          <label for="email"></label>\n          <input type="text" name="email" placeholder="email" value="">\n          <label for="password"></label>\n          <input type="password" name="password" placeholder="password" value="">\n          <label for="passwordConfirmation"></label>\n          <input type="password" name="passwordConfirmation" placeholder="password confirmation" value=""><br>\n          <input type="submit" name="register" value="Register" class=\'button\'><br><br>\n          <p class="powered">Powered by</p><img src="images/nasa.png" id="nasa">\n        </form>\n      </div>\n    </div>\n    ');
   }
 
   //HANDLE-FORM
@@ -198,18 +204,32 @@ $(function () {
   var $tweetStream = $('.tweetStream');
 
   function getTweets(title) {
-    title = title.split(",")[0];
-    console.log(title);
+    console.log("Title", title);
     var tweets = $.get('http://localhost:8000/api/tweets?q=' + title).done(function (data) {
-      console.log(data);
-      var $tweetItems = $('.tweetItems');
-      data.statuses.forEach(function (tweet) {
-        console.log(tweet.text);
-        var itemHtml = '<li class="stream-item">' + '<div class="tweet">' + '<div id="image">' + '<img src="' + tweet.user.profile_image_url + '" alt="User image goes here.">' + '</div>' + '<div class="content">' + '<strong class="fullname">' + tweet.user.name + '</strong>' + '<span>&rlm;</span>' + '<span>@</span><b>' + tweet.user.screen_name + '</b>' + '&nbsp;&middot;&nbsp;' + '<small>' + tweet.created_at + '</small>' + '<p>' + tweet.text + '</p>' + '</div>' + '</div>' + '</li>';
-        $tweetItems.append(itemHtml);
+      if (data.statuses.length === 0) {
+        // Truncate the title
+        title = title.split(",")[0];
+        console.log("Truncated Title: ", title);
+        tweets = $.get('http://localhost:8000/api/tweets?q=' + title).done(function (dataTweets) {
+          console.log("dt", dataTweets);
+          appendTweet(title, dataTweets);
+        }).fail(function (err) {
+          console.log("Somethigng went wrong", err);
+        });
+      } else {
+        appendTweet(title, data);
+      }
+    });
+  }
 
-        // '<li>'+tweet.text+'</li>');
-      });
+  function appendTweet(title, data) {
+    console.log(title);
+    var $tweetItems = $('.tweetItems');
+    data.statuses.forEach(function (tweet) {
+      var tweetTime = tweet.created_at.split(" +0000")[0] + tweet.created_at.split(" +0000")[1];
+      var itemHtml = '<li class="stream-item">' + '<div class="tweet">' + '<div id="image">' + '<img src="' + tweet.user.profile_image_url + '" alt="User image goes here.">' + '</div>' + '<div class="content">' + '<strong class="fullname">' + tweet.user.name + '</strong>' + '<span>&rlm;</span>' + '<span>@</span><b>' + tweet.user.screen_name + '</b>' + '&nbsp;&middot;&nbsp;' + '<small>' + tweetTime + '</small>' + '<p>' + tweet.text + '</p>' + '</div>' + '</li>';
+      $tweetItems.append(itemHtml);
+      // '<li>'+tweet.text+'</li>');
     });
   }
 
@@ -221,7 +241,7 @@ $(function () {
       console.log(disaster);
       var date = new Date(disaster.geometries[0].date).toLocaleDateString("en-GB");
       infoWindow = new google.maps.InfoWindow({
-        content: '\n                  <div class="infoWindow">\n                    <h2>' + disaster.title + '</h2>\n                    <h5>' + date + '</h5>\n                    <a class="button" href="' + disaster.sources[0].url + '" target="_blank">More Information</a>\n                    <button id="goBack">Go Back</button>\n                  </div>\n                  ',
+        content: '\n        <div class="infoWindow">\n          <h2>' + disaster.title + '</h2>\n          <h5>' + date + '</h5>\n          <a class="button" href="' + disaster.sources[0].url + '" target="_blank">More Information</a>\n          <button id="goBack">Go Back</button>\n        </div>\n        ',
         position: circle.center
       });
       map.setCenter(circle.center);
@@ -281,7 +301,10 @@ $(function () {
   }
 
   function smoothZoomOut(map, min, cnt) {
-    if (cnt <= min) {
+    if (cnt < min) {
+      setTimeout(function () {
+        map.panTo({ lat: 20, lng: 0 });
+      }, 150);
       return;
     } else {
       (function () {
