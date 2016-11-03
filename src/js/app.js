@@ -8,7 +8,7 @@ $(() => {
   let $mapDiv = $('#map');
   let map = new google.maps.Map($mapDiv[0], {
     center: { lat: 42.77509, lng: 13.01239 },
-    zoom: 4,
+    zoom: 2,
     styles: [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#000000"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]},{"featureType":"administrative.province","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"landscape","elementType":"all","stylers":[{"saturation":"-39"},{"lightness":"35"},{"gamma":"1.08"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"saturation":"0"}]},{"featureType":"landscape.man_made","elementType":"all","stylers":[{"saturation":"-100"},{"lightness":"10"}]},{"featureType":"landscape.man_made","elementType":"geometry.stroke","stylers":[{"saturation":"-100"},{"lightness":"-14"}]},{"featureType":"poi","elementType":"all","stylers":[{"saturation":"-100"},{"lightness":"10"},{"gamma":"2.26"}]},{"featureType":"poi","elementType":"labels.text","stylers":[{"saturation":"-100"},{"lightness":"-3"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":"-100"},{"lightness":"54"}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"saturation":"-100"},{"lightness":"-7"}]},{"featureType":"road.arterial","elementType":"all","stylers":[{"saturation":"-100"}]},{"featureType":"road.local","elementType":"all","stylers":[{"saturation":"-100"},{"lightness":"-2"}]},{"featureType":"transit","elementType":"all","stylers":[{"saturation":"-100"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"saturation":"-100"},{"lightness":"100"}]},{"featureType":"water","elementType":"geometry.stroke","stylers":[{"saturation":"-100"},{"lightness":"-100"}]}]
   });
 
@@ -35,12 +35,13 @@ $(() => {
       lat: position.coords.latitude,
       lng:position.coords.longitude
     };
-    map.panTo(latLng);
+    // map.panTo(latLng);
 
-    let maker = new google.maps.Marker({
+    let marker = new google.maps.Marker({
       position: latLng,
       animation: google.maps.Animation.DROP,
       draggable: true,
+      icon: "../images/green-pin.png",
       map
     });
   });
@@ -81,6 +82,7 @@ $(() => {
             fillOpacity: 0.4,
             category: disaster.categories[0].title
           });
+          $(circle).fadeIn(1000);
           circles.push(circle);
           addInfoWindowForDisaster(disaster, circle);
         } else {
@@ -94,6 +96,7 @@ $(() => {
             fillOpacity: 0.4,
             category: disaster.categories[0].title
           });
+          $(circle).fadeIn(1000);
           circles.push(circle);
           addInfoWindowForDisaster(disaster, circle);
         }
@@ -210,7 +213,6 @@ $(() => {
         $("input").on("click", function () {
           $(this).parent().toggleClass('clicked');
           let inputValue = this.value;
-          console.log(inputValue);
           getCheckedBoxes();
         });
       }
@@ -223,7 +225,6 @@ $(() => {
           let category = circles[i].category;
           if ((categoriesOnBoard.indexOf(category)) < 0) {
             categoriesOnBoard.push(category);
-            console.log(categoriesOnBoard);
           }
           if ((categoriesOnBoard.indexOf(inputs[i].defaultValue)) < 0) {
             inputs[i].setAttribute("disabled", true);
@@ -247,14 +248,28 @@ $(() => {
         let $tweetStream = $('.tweetStream');
 
       function getTweets(title) {
-        title = title.split(",")[0];
-        console.log(title);
+        console.log("Title", title);
         let tweets = $.get(`http://localhost:8000/api/tweets?q=${title}`)
-        .done(function(data) {
-          console.log(data);
+        .done((data) => {
+          if(data.statuses.length === 0) {
+              // Truncate the title
+              title = title.split(",")[0];
+              console.log("Truncated Title: ", title);
+              tweets = $.get(`http://localhost:8000/api/tweets?q=${title}`).done((dataTweets) => {
+                console.log("dt", dataTweets);
+                appendTweet(title, dataTweets);
+              }).fail((err)=> {console.log("Somethigng went wrong", err);});
+
+          } else {
+            appendTweet(title, data);
+          }
+        });
+      }
+        function appendTweet(title, data){
+          console.log(title);
           let $tweetItems = $('.tweetItems');
           data.statuses.forEach((tweet) => {
-            console.log(tweet.text);
+            let tweetTime = (tweet.created_at.split(" +0000")[0])+(tweet.created_at.split(" +0000")[1]);
             let itemHtml =
               '<li class="stream-item">'+
                 '<div class="tweet">'+
@@ -267,7 +282,7 @@ $(() => {
                     '<span>@</span><b>' + tweet.user.screen_name + '</b>' +
                     '&nbsp;&middot;&nbsp;' +
                     '<small>' +
-                      tweet.created_at +
+                      tweetTime +
                     '</small>' +
                     '<p>' + tweet.text +'</p>' +
                   '</div>' +
@@ -276,17 +291,14 @@ $(() => {
               ;
               $tweetItems.append(itemHtml);
 
-              // '<li>'+tweet.text+'</li>');
             });
-          });
-        }
+          }
+
 
         //ADD INFO WINDOW
         function addInfoWindowForDisaster(disaster, circle) {
           google.maps.event.addListener(circle, "click", () => {
             getTweets(disaster.title);
-            console.log(circle.category);
-            console.log(disaster);
             let date = new Date(disaster.geometries[0].date).toLocaleDateString("en-GB");
             infoWindow = new google.maps.InfoWindow({
               content: `
@@ -315,7 +327,6 @@ $(() => {
 
         //FILTERING FUNCTIONALITY
         function getCheckedBoxes () {
-          console.log("change");
           let checkBoxes = $(".checkBox");
           checkBoxesChecked = [];
           for (var i=0; i<checkBoxes.length; i++) {
@@ -323,7 +334,6 @@ $(() => {
               checkBoxesChecked.push(checkBoxes[i].defaultValue);
             }
           }
-          console.log(checkBoxesChecked);
           filterCategories();
         }
 

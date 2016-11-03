@@ -3,7 +3,7 @@
 }
 
 #map {
-  height: 815px;
+  height: 700px;
   float:right;
 }
 
@@ -225,4 +225,9 @@ input.checkBox {
   overflow-y:scroll;
   overflow-x:hidden;
   width: 34%;
+}
+
+google.maps.Marker {
+  height: 40px;
+  width: 40px;
 }
