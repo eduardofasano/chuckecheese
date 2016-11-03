@@ -226,8 +226,3 @@ input.checkBox {
   overflow-x:hidden;
   width: 34%;
 }
-
-google.maps.Marker {
-  height: 40px;
-  width: 40px;
-}
