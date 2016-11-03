@@ -292,6 +292,7 @@ $(() => {
               $tweetItems.append(itemHtml);
 
             });
+            $('.tweet a').attr('target', '_blank');
           }
 
 

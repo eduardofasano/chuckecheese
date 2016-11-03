@@ -224,6 +224,7 @@ $(function () {
       var itemHtml = '<li class="stream-item">' + '<div class="tweet">' + '<div id="image">' + '<img src="' + tweet.user.profile_image_url + '" alt="User image goes here.">' + '</div>' + '<div class="content">' + '<strong class="fullname">' + tweet.user.name + '</strong>' + '<span>&rlm;</span>' + '<span>@</span><b>' + tweet.user.screen_name + '</b>' + '&nbsp;&middot;&nbsp;' + '<small>' + tweetTime + '</small>' + '<p>' + tweet.text + '</p>' + '</div>' + '</div>' + '</li>';
       $tweetItems.append(itemHtml);
     });
+    $('.tweet a').attr('target', '_blank');
   }
 
   //ADD INFO WINDOW
