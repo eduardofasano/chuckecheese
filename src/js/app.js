@@ -267,13 +267,13 @@ $(() => {
 
   function getTweets(title) {
     console.log("Title", title);
-    let tweets = $.get(`http://localhost:8000/api/tweets?q=${title}`)
+    let tweets = $.get(`https://localhost:8000/api/tweets?q=${title}`)
     .done((data) => {
       if(data.statuses.length === 0) {
           // Truncate the title
           title = title.split(",")[0];
           console.log("Truncated Title: ", title);
-          tweets = $.get(`http://localhost:8000/api/tweets?q=${title}`).done((dataTweets) => {
+          tweets = $.get(`https://localhost:8000/api/tweets?q=${title}`).done((dataTweets) => {
             console.log("dt", dataTweets);
             appendTweet(title, dataTweets);
           }).fail((err)=> {console.log("Something went wrong", err);});
