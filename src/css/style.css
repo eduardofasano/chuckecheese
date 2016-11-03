@@ -55,7 +55,7 @@ width: 360px;
 }
 
 
-div.gm-style-iw {
+.gm-style-iw {
   text-align: center;
   display: block;
 }
@@ -148,12 +148,18 @@ input.checkBox {
 
 /*INFOWINDOW STYLING BELOW ///////////////////////////////////////////////////////////////////*/
 
+.infoWindow h2 {
+  font-weight: bold;
+}
+
+.infoWindow h5 {
+  font-weight: bold;
+}
+
 .infoWindow button {
   display: block;
   margin: 0 auto;
 }
-
-
 
 /*TWITTER STYLING BELOW ///////////////////////////////////////////////////////////////////*/
 
@@ -163,8 +169,19 @@ input.checkBox {
  color: #292f33 ;
  font-size: 14px;
  line-height: 18px;
- margin: 0;
+ margin: 50px 0 0 0;
  padding: 0;
+}
+
+.tweetStreamHeader {
+  top: 0;
+  font-weight: bold;
+  position: fixed;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 6px;
+  font-size: 20px;
+  width: 35%;
+  text-align: center;
 }
 
 .tweetStream {
