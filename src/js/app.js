@@ -66,7 +66,7 @@ $(() => {
   //POPULATE MAP
   function populateMap() {
     let getEvents = $.get('http://eonet.sci.gsfc.nasa.gov/api/v2/events')
-    .done(function(data) {
+      .done(function(data) {
       data.events.forEach((disaster) => {
         let category = disaster.categories[0].title;
         if (disaster.geometries[0].coordinates[0] instanceof Array) {
@@ -233,19 +233,21 @@ $(() => {
 
   //INPUT BOX FUNCTIONALITY
   function setBoxStatus () {
-    let inputs = $(".checkBox");
+    let $inputs = $(".checkBox");
     let categoriesOnBoard = [];
-    for(let i=0; i<inputs.length; i++) {
-      let category = circles[i].category;
-      if ((categoriesOnBoard.indexOf(category)) < 0) {
+    circles.forEach((circle, i) => {
+      let category = circle.category;
+      if (categoriesOnBoard.indexOf(category) === -1) {
         categoriesOnBoard.push(category);
-        console.log(categoriesOnBoard);
       }
-      if ((categoriesOnBoard.indexOf(inputs[i].defaultValue)) < 0) {
-        inputs[i].setAttribute("disabled", true);
-        inputs[i].parentElement.className = "labelStyle clicked disabled";
+    });
+
+    $inputs.each((i, input) => {
+      let $input = $(input);
+      if(categoriesOnBoard.indexOf($input.val()) === -1) {
+        $input.prop('disabled', true).parent().addClass('disabled');
       }
-    }
+    });
   }
 
   //TWITTER FUNCTIONALITY
@@ -275,7 +277,7 @@ $(() => {
           tweets = $.get(`http://localhost:8000/api/tweets?q=${title}`).done((dataTweets) => {
             console.log("dt", dataTweets);
             appendTweet(title, dataTweets);
-          }).fail((err)=> {console.log("Somethigng went wrong", err);});
+          }).fail((err)=> {console.log("Something went wrong", err);});
 
       } else {
         appendTweet(title, data);

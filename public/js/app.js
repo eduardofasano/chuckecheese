@@ -180,19 +180,21 @@ $(function () {
 
   //INPUT BOX FUNCTIONALITY
   function setBoxStatus() {
-    var inputs = $(".checkBox");
+    var $inputs = $(".checkBox");
     var categoriesOnBoard = [];
-    for (var i = 0; i < inputs.length; i++) {
-      var category = circles[i].category;
-      if (categoriesOnBoard.indexOf(category) < 0) {
+    circles.forEach(function (circle, i) {
+      var category = circle.category;
+      if (categoriesOnBoard.indexOf(category) === -1) {
         categoriesOnBoard.push(category);
-        console.log(categoriesOnBoard);
       }
-      if (categoriesOnBoard.indexOf(inputs[i].defaultValue) < 0) {
-        inputs[i].setAttribute("disabled", true);
-        inputs[i].parentElement.className = "labelStyle clicked disabled";
+    });
+
+    $inputs.each(function (i, input) {
+      var $input = $(input);
+      if (categoriesOnBoard.indexOf($input.val()) === -1) {
+        $input.prop('disabled', true).parent().addClass('disabled');
       }
-    }
+    });
   }
 
   //TWITTER FUNCTIONALITY
@@ -214,7 +216,7 @@ $(function () {
           console.log("dt", dataTweets);
           appendTweet(title, dataTweets);
         }).fail(function (err) {
-          console.log("Somethigng went wrong", err);
+          console.log("Something went wrong", err);
         });
       } else {
         appendTweet(title, data);
