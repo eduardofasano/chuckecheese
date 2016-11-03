@@ -12,28 +12,27 @@ $(() => {
     styles: [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#000000"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]},{"featureType":"administrative.province","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"landscape","elementType":"all","stylers":[{"saturation":"-39"},{"lightness":"35"},{"gamma":"1.08"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"saturation":"0"}]},{"featureType":"landscape.man_made","elementType":"all","stylers":[{"saturation":"-100"},{"lightness":"10"}]},{"featureType":"landscape.man_made","elementType":"geometry.stroke","stylers":[{"saturation":"-100"},{"lightness":"-14"}]},{"featureType":"poi","elementType":"all","stylers":[{"saturation":"-100"},{"lightness":"10"},{"gamma":"2.26"}]},{"featureType":"poi","elementType":"labels.text","stylers":[{"saturation":"-100"},{"lightness":"-3"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":"-100"},{"lightness":"54"}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"saturation":"-100"},{"lightness":"-7"}]},{"featureType":"road.arterial","elementType":"all","stylers":[{"saturation":"-100"}]},{"featureType":"road.local","elementType":"all","stylers":[{"saturation":"-100"},{"lightness":"-2"}]},{"featureType":"transit","elementType":"all","stylers":[{"saturation":"-100"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"saturation":"-100"},{"lightness":"100"}]},{"featureType":"water","elementType":"geometry.stroke","stylers":[{"saturation":"-100"},{"lightness":"-100"}]}]
   });
 
-  let colorPalette =
-      {
-      "Drought": "#88b086",
-      "Dust And Haze": "#e9dab1",
-      "Wildfires": "#d25566",
-      "Floods": "#79b4e5",
-      "Severe Storms": "#a4dddc",
-      "Volcanoes": "#e3a744",
-      "Water Color": "#bbe2b8",
-      "Landslides": "#f1c7d9",
-      "Sea Lake Ice": "#d686d8",
-      "Earthquakes": "#d5bae5",
-      "Snow": "#d98f91",
-      "Temperature Extremes": "#f3f58c",
-      "Manmade": "#8a88e5"
-    };
+  let colorPalette = {
+    "Drought": "#88b086",
+    "Dust And Haze": "#e9dab1",
+    "Wildfires": "#d25566",
+    "Floods": "#79b4e5",
+    "Severe Storms": "#a4dddc",
+    "Volcanoes": "#e3a744",
+    "Water Color": "#bbe2b8",
+    "Landslides": "#f1c7d9",
+    "Sea Lake Ice": "#d686d8",
+    "Earthquakes": "#d5bae5",
+    "Snow": "#d98f91",
+    "Temperature Extremes": "#f3f58c",
+    "Manmade": "#8a88e5"
+  };
 
   //CURRENT POSITION
   let currentPosition = navigator.geolocation.getCurrentPosition((position) => {
     let latLng = {
       lat: position.coords.latitude,
-      lng:position.coords.longitude
+      lng: position.coords.longitude
     };
     // map.panTo(latLng);
 
@@ -48,6 +47,7 @@ $(() => {
 
   //GO BACK
   $mapDiv.on('click', '#goBack', goBack);
+
   function goBack() {
     resetMap();
     showFilterForm();
@@ -67,7 +67,7 @@ $(() => {
     .done(function(data) {
       data.events.forEach((disaster) => {
         let category = disaster.categories[0].title;
-        if(disaster.geometries[0].coordinates[0] instanceof Array) {
+        if (disaster.geometries[0].coordinates[0] instanceof Array) {
           let bounds = new google.maps.LatLngBounds();
           disaster.geometries[0].coordinates.forEach((coords) => {
             bounds.extend(new google.maps.LatLng(coords[1], coords[0]));
@@ -110,7 +110,7 @@ $(() => {
     return !!localStorage.getItem('token');
   }
 
-  if(isLoggedIn()) {
+  if (isLoggedIn()) {
     showFilterForm();
     populateMap();
   } else {
@@ -150,8 +150,9 @@ $(() => {
 
     //HANDLE-FORM
     $container.on('submit', 'form', handleForm);
+
     function handleForm() {
-      if(event) event.preventDefault();
+      if (event) event.preventDefault();
       let token = localStorage.getItem('token');
       let $form = $(this);
 
@@ -165,10 +166,10 @@ $(() => {
         method,
         data,
         beforeSend: function(jqXHR) {
-          if(token) return jqXHR.setRequestHeader('Authorization', `Bearer ${token}`);
+          if (token) return jqXHR.setRequestHeader('Authorization', `Bearer ${token}`);
         }
       }).done((data) => {
-        if(data.token) localStorage.setItem("token", data.token);
+        if (data.token) localStorage.setItem("token", data.token);
         console.log('hello');
         showFilterForm();
         populateMap();
@@ -177,8 +178,9 @@ $(() => {
 
     //LOGOUT
     $container.on('click', '#logOut', logout);
+
     function logout() {
-      if(event) event.preventDefault();
+      if (event) event.preventDefault();
       localStorage.removeItem('token');
       showLoginForm();
       circles.forEach((circle) => {
@@ -192,25 +194,25 @@ $(() => {
       if (event) event.preventDefault();
       $sidebar.html(`
         <ul class="checkbox-grid">
-          <form class="filter" action="#" method="get">
-            <li><label class="labelStyle" id="drought"><input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought</label></li>
-            <li><label class="labelStyle" id="dust"><input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze</label></li>
-            <li><label class="labelStyle" id="wildfires"><input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires</label></li>
-            <li><label class="labelStyle" id="floods"><input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods</label></li>
-            <li><label class="labelStyle" id="storms"><input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms</label></li>
-            <li><label class="labelStyle" id="volcanoes"><input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes</label></li>
-            <li><label class="labelStyle" id="water"><input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color</label></li>
-            <li><label class="labelStyle" id="slides"><input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides</label></li>
-            <li><label class="labelStyle" id="sea"><input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice</label></li>
-            <li><label class="labelStyle" id="earthquakes"><input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes</label></li>
-            <li><label class="labelStyle" id="snow"><input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow</label></li>
-            <li><label class="labelStyle" id="temp"><input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme</label></li>
-            <li><label class="labelStyle" id="man"><input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade</label></li>
-          </form>
+        <form class="filter" action="#" method="get">
+        <li><label class="labelStyle" id="drought"><input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought</label></li>
+        <li><label class="labelStyle" id="dust"><input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze</label></li>
+        <li><label class="labelStyle" id="wildfires"><input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires</label></li>
+        <li><label class="labelStyle" id="floods"><input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods</label></li>
+        <li><label class="labelStyle" id="storms"><input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms</label></li>
+        <li><label class="labelStyle" id="volcanoes"><input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes</label></li>
+        <li><label class="labelStyle" id="water"><input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color</label></li>
+        <li><label class="labelStyle" id="slides"><input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides</label></li>
+        <li><label class="labelStyle" id="sea"><input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice</label></li>
+        <li><label class="labelStyle" id="earthquakes"><input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes</label></li>
+        <li><label class="labelStyle" id="snow"><input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow</label></li>
+        <li><label class="labelStyle" id="temp"><input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme</label></li>
+        <li><label class="labelStyle" id="man"><input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade</label></li>
+        </form>
         </ul>
         <button id="logOut">Log Out</button>
         `);
-        $("input").on("click", function () {
+        $("input").on("click", function() {
           $(this).parent().toggleClass('clicked');
           let inputValue = this.value;
           getCheckedBoxes();
@@ -218,10 +220,10 @@ $(() => {
       }
 
       //INPUT BOX FUNCTIONALITY
-      function setBoxStatus () {
+      function setBoxStatus() {
         let inputs = $(".checkBox");
         let categoriesOnBoard = [];
-        for(let i=0; i<inputs.length; i++) {
+        for (let i = 0; i < inputs.length; i++) {
           let category = circles[i].category;
           if ((categoriesOnBoard.indexOf(category)) < 0) {
             categoriesOnBoard.push(category);
@@ -229,16 +231,17 @@ $(() => {
           if ((categoriesOnBoard.indexOf(inputs[i].defaultValue)) < 0) {
             inputs[i].setAttribute("disabled", true);
             inputs[i].parentElement.className = "labelStyle clicked disabled";
+          }
         }
       }
-    }
 
       //TWITTER FUNCTIONALITY
       function showTwitterForm() {
-        if(event) event.preventDefault();
+        if (event) event.preventDefault();
         $sidebar.html(`
 
-          <div class="tweetStream">Tweets Div
+          <div class="tweetStream">
+          <div class="tweetStreamHeader">Here's what Twitter has to say...</div>
           <ul class="tweetItems">
           </ul>
           </div>
@@ -318,7 +321,7 @@ $(() => {
               circle.setMap(null);
             });
             circles = [];
-            setTimeout(() =>{
+            setTimeout(() => {
               infoWindow.open(map, circle);
             }, 1500);
             showTwitterForm();
@@ -329,7 +332,7 @@ $(() => {
         function getCheckedBoxes () {
           let checkBoxes = $(".checkBox");
           checkBoxesChecked = [];
-          for (var i=0; i<checkBoxes.length; i++) {
+          for (var i = 0; i < checkBoxes.length; i++) {
             if (checkBoxes[i].checked) {
               checkBoxesChecked.push(checkBoxes[i].defaultValue);
             }
@@ -337,9 +340,9 @@ $(() => {
           filterCategories();
         }
 
-        function filterCategories () {
-          for(var i=0; i<circles.length; i++) {
-            if((checkBoxesChecked.indexOf(circles[i].category)) > -1) {
+        function filterCategories() {
+          for (var i = 0; i < circles.length; i++) {
+            if ((checkBoxesChecked.indexOf(circles[i].category)) > -1) {
               circles[i].setVisible(true);
             } else {
               circles[i].setVisible(false);
@@ -347,31 +350,33 @@ $(() => {
           }
         }
 
-      //ZOOM-FUNCTIONS
-      //http://stackoverflow.com/questions/4752340/how-to-zoom-in-smoothly-on-a-marker-in-google-maps
-      function smoothZoomIn (map, max, cnt) {
-        if (cnt >= max) {
-          return;
+        //ZOOM-FUNCTIONS
+        //http://stackoverflow.com/questions/4752340/how-to-zoom-in-smoothly-on-a-marker-in-google-maps
+        function smoothZoomIn(map, max, cnt) {
+          if (cnt >= max) {
+            return;
+          } else {
+            let z = google.maps.event.addListener(map, 'zoom_changed', function(event) {
+              google.maps.event.removeListener(z);
+              smoothZoomIn(map, max, cnt + 1);
+            });
+            setTimeout(function() {
+              map.setZoom(cnt);
+            }, 150);
+          }
         }
-        else {
-          let z = google.maps.event.addListener(map, 'zoom_changed', function(event){
-            google.maps.event.removeListener(z);
-            smoothZoomIn(map, max, cnt + 1);
-          });
-          setTimeout(function(){ map.setZoom(cnt); }, 150);
-        }
-      }
 
-      function smoothZoomOut (map, min, cnt) {
-        if (cnt <= min) {
-          return;
+        function smoothZoomOut(map, min, cnt) {
+          if (cnt <= min) {
+            return;
+          } else {
+            let z = google.maps.event.addListener(map, 'zoom_changed', function(event) {
+              google.maps.event.removeListener(z);
+              smoothZoomOut(map, min, cnt - 1);
+            });
+            setTimeout(function() {
+              map.setZoom(cnt);
+            }, 150);
+          }
         }
-        else {
-          let z = google.maps.event.addListener(map, 'zoom_changed', function(event){
-            google.maps.event.removeListener(z);
-            smoothZoomOut(map, min, cnt - 1);
-          });
-          setTimeout(function(){ map.setZoom(cnt); }, 150);
-        }
-      }
-});
+      });

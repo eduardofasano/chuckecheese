@@ -17,18 +17,18 @@
 }
 
 form {
-text-align: center;
+  text-align: center;
 }
 
 .checkbox-grid li {
-    display: block;
+  display: block;
 
 }
 
 input.button {
-   width: 147px;
-   text-align: center;
-   margin: auto;
+  width: 147px;
+  text-align: center;
+  margin: auto;
 }
 
 .logo {
@@ -38,24 +38,24 @@ input.button {
 }
 
 .filter {
-text-align: center;
-padding-top: 70px;
-width: 360px;
+  text-align: center;
+  padding-top: 70px;
+  width: 360px;
 }
 
 
 #logOut   {
   margin-top: 20px;
-	text-align: center;
-	text-shadow: -1px -1px 0px rgba(255,255,255,0.3), 1px 1px 0px rgba(0,0,0,0.8);
-	color: #222;
-	opacity: 0.4;
+  text-align: center;
+  text-shadow: -1px -1px 0px rgba(255,255,255,0.3), 1px 1px 0px rgba(0,0,0,0.8);
+  color: #222;
+  opacity: 0.4;
   display: block;
   margin: auto;
 }
 
 
-div.gm-style-iw {
+.gm-style-iw {
   text-align: center;
   display: block;
 }
@@ -148,23 +148,43 @@ input.checkBox {
 
 /*INFOWINDOW STYLING BELOW ///////////////////////////////////////////////////////////////////*/
 
+.infoWindow h2 {
+  font-family: 'Raleway', sans-serif;
+  font-weight: bold;
+}
+
+.infoWindow h5 {
+  font-family: 'Raleway', sans-serif;
+  font-weight: bold;
+}
+
 .infoWindow button {
   display: block;
   margin: 0 auto;
 }
 
-
-
 /*TWITTER STYLING BELOW ///////////////////////////////////////////////////////////////////*/
 
 .tweetItems {
- font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
- background-color: #f5f8fa ;
- color: #292f33 ;
- font-size: 14px;
- line-height: 18px;
- margin: 0;
- padding: 0;
+  font-family: 'Raleway', sans-serif;
+  background-color: #f5f8fa ;
+  color: #292f33 ;
+  font-size: 14px;
+  line-height: 18px;
+  margin: 50px 0 0 0;
+  padding: 0;
+}
+
+.tweetStreamHeader {
+  font-family: 'Raleway', sans-serif;
+  top: 0;
+  font-weight: bold;
+  position: fixed;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 6px;
+  font-size: 20px;
+  width: 35%;
+  text-align: center;
 }
 
 .tweetStream {
@@ -176,35 +196,35 @@ input.checkBox {
 }
 
 .tweet {
- border-bottom: 1px solid #e1e8ed ;
- cursor: pointer;
- font-size: 14px;
- line-height: 18px;
- padding: 10px;
- overflow: hidden;
- width: 100%;
- float: left;
+  border-bottom: 1px solid #e1e8ed ;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 18px;
+  padding: 10px;
+  overflow: hidden;
+  width: 100%;
+  float: left;
 }
 
 .tweet p {
- color: #292f33 ;
- font-size: 14px;
- line-height: 18px;
- white-space: pre-wrap;
- margin: 0;
+  color: #292f33 ;
+  font-size: 14px;
+  line-height: 18px;
+  white-space: pre-wrap;
+  margin: 0;
 }
 
 .tweet img {
- height: 48px;
- width: 48px;
- float: left;
- margin-right: 10px;
+  height: 48px;
+  width: 48px;
+  float: left;
+  margin-right: 10px;
 }
 
 .fullname {
- font-weight: bold;
- color: #292f33 ;
- font-size: 14px;
+  font-weight: bold;
+  color: #292f33 ;
+  font-size: 14px;
 }
 
 .content {
@@ -225,9 +245,4 @@ input.checkBox {
   overflow-y:scroll;
   overflow-x:hidden;
   width: 34%;
-}
-
-google.maps.Marker {
-  height: 40px;
-  width: 40px;
 }
