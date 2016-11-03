@@ -214,7 +214,7 @@ $(function () {
           console.log("dt", dataTweets);
           appendTweet(title, dataTweets);
         }).fail(function (err) {
-          console.log("Somethigng went wrong", err);
+          console.log("Something went wrong", err);
         });
       } else {
         appendTweet(title, data);

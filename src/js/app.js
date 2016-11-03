@@ -275,7 +275,7 @@ $(() => {
           tweets = $.get(`http://localhost:8000/api/tweets?q=${title}`).done((dataTweets) => {
             console.log("dt", dataTweets);
             appendTweet(title, dataTweets);
-          }).fail((err)=> {console.log("Somethigng went wrong", err);});
+          }).fail((err)=> {console.log("Something went wrong", err);});
 
       } else {
         appendTweet(title, data);
