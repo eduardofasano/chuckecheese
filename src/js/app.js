@@ -385,7 +385,7 @@ $(() => {
   function smoothZoomOut(map, min, cnt) {
     if (cnt < min) {
       setTimeout(function() {
-        map.panTo({ lat: 20, lng: 0 });
+        map.panTo({ lat: 20, lng: map.getCenter().lng() });
       }, 150);
       return;
     } else {
