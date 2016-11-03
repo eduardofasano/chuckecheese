@@ -3,7 +3,7 @@
 }
 
 #map {
-  height: 700px;
+  height: 900px;
   float:right;
 }
 
@@ -66,15 +66,6 @@ div.gm-style-iw {
   display: none;
 }
 
-/*INFOWINDOW STYLING BELOW ///////////////////////////////////////////////////////////////////*/
-
-.infoWindow button {
-  display: block;
-  margin: 0 auto;
-}
-
-/*TWITTER STYLING BELOW ///////////////////////////////////////////////////////////////////*/
-
 .checkBox {
   width: 100px;
 }
@@ -94,9 +85,75 @@ input.checkBox {
   font-weight: lighter;
 }
 
-.clicked {
-  background-color: #efede6;
+
+
+
+#drought {
+  background-color: rgba(136, 176, 134, 0.3);
+
 }
+#dust {
+  background-color: rgba(233, 218, 177, 0.3);
+
+}
+#wildfires {
+  background-color: rgba(210, 85, 102, 0.3);
+
+}
+#floods {
+  background-color: rgba(121, 180, 229, 0.3);
+
+}
+#storms {
+  background-color: rgba(164, 221, 220, 0.3);
+
+}
+#volcanoes {
+  background-color: rgba(227, 167, 68, 0.3);
+
+}
+#water {
+  background-color: rgba(187, 226, 184, 0.3);
+
+}
+#slides {
+  background-color: rgba(241, 199, 217, 0.3);
+
+}
+#sea {
+  background-color: rgba(214, 134, 216, 0.3);
+
+}
+#earthquakes {
+  background-color: rgba(213, 186, 229, 0.3);
+
+}
+#snow {
+  background-color: rgba(217, 143, 145, 0.3);
+
+}
+#temp {
+  background-color: rgba(243, 245, 140, 0.1);
+
+}
+#man {
+  background-color: rgba(138, 136, 229, 0.3);
+
+}
+
+.clicked {
+  background-color: white !important;
+}
+
+
+/*INFOWINDOW STYLING BELOW ///////////////////////////////////////////////////////////////////*/
+
+.infoWindow button {
+  display: block;
+  margin: 0 auto;
+}
+
+
 
 /*TWITTER STYLING BELOW ///////////////////////////////////////////////////////////////////*/
 
