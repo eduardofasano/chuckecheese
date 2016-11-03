@@ -206,12 +206,12 @@ $(function () {
 
   function getTweets(title) {
     console.log("Title", title);
-    var tweets = $.get('https://localhost:' + process.env.PORT + '/api/tweets?q=' + title).done(function (data) {
+    var tweets = $.get('/api/tweets?q=' + title).done(function (data) {
       if (data.statuses.length === 0) {
         // Truncate the title
         title = title.split(",")[0];
         console.log("Truncated Title: ", title);
-        tweets = $.get('https://localhost:' + process.env.PORT + '/api/tweets?q=' + title).done(function (dataTweets) {
+        tweets = $.get('/api/tweets?q=' + title).done(function (dataTweets) {
           console.log("dt", dataTweets);
           appendTweet(title, dataTweets);
         }).fail(function (err) {
