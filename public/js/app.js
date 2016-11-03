@@ -198,7 +198,7 @@ $(function () {
   //TWITTER FUNCTIONALITY
   function showTwitterForm() {
     if (event) event.preventDefault();
-    $sidebar.html('\n\n    <div class="tweetStream">Tweets Div\n      <ul class="tweetItems">\n      </ul>\n    </div>\n    ');
+    $sidebar.html('\n\n      <div class="tweetStream">\n      <div class="tweetStreamHeader">Here\'s what Twitter has to say...</div>\n      <ul class="tweetItems">\n      </ul>\n      </div>\n    ');
   }
 
   var $tweetStream = $('.tweetStream');

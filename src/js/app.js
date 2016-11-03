@@ -253,10 +253,11 @@ $(() => {
     if(event) event.preventDefault();
     $sidebar.html(`
 
-    <div class="tweetStream">Tweets Div
+      <div class="tweetStream">
+      <div class="tweetStreamHeader">Here's what Twitter has to say...</div>
       <ul class="tweetItems">
       </ul>
-    </div>
+      </div>
     `);
   }
 

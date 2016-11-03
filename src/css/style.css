@@ -32,7 +32,7 @@
   font-family: 'Raleway', sans-serif;
   font-weight: lighter;
   text-align: center;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 }
 
 
@@ -93,8 +93,8 @@ form.login {
 
 .filter {
   text-align: center;
-  width: 340px;
-  margin-top: -20px;
+  max-width: 340px;
+  margin: auto;
 }
 
 input.button {
@@ -146,11 +146,9 @@ input.checkBox {
   border-radius: 3px;
   cursor: pointer;
   padding-top: 5px;
-  margin-left: 20px;
   color: #595959;
   font-family: 'Raleway', sans-serif;
-  margin-left: 30%;
-  width: 340px;
+  width: 100%;
 }
 
 
