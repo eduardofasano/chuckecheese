@@ -21,11 +21,12 @@
 }
 
 .dsquark {
-  padding-top: 50px;
+  padding-top: 30px;
   font-family: 'Raleway', sans-serif;
   font-weight: bold;
   text-align: center;
   font-size: 35px;
+  margin-bottom: 10px;
 }
 
 .strapline {
@@ -117,9 +118,9 @@ div#registerForm {
 	color: #222;
 	opacity: 0.4;
   display: block;
-  position: absolute;
   border: none;
-  margin-left: 40%;
+  width: 340px;
+  margin: auto;
 }
 
 
@@ -150,8 +151,6 @@ input.checkBox {
   font-family: 'Raleway', sans-serif;
   width: 100%;
 }
-
-
 
 #drought {
   background-color: rgba(136, 176, 134, 0.3);
