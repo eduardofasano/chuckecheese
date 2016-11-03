@@ -283,10 +283,13 @@ $(() => {
     });
   }
 
+let tweetText;
+
   function appendTweet(title, data){
     console.log(title);
     let $tweetItems = $('.tweetItems');
     data.statuses.forEach((tweet) => {
+      tweetText = tweet.text;
       let tweetTime = (tweet.created_at.split(" +0000")[0])+(tweet.created_at.split(" +0000")[1]);
       let itemHtml =
         '<li class="stream-item">'+
@@ -308,6 +311,7 @@ $(() => {
       $tweetItems.append(itemHtml);
             // '<li>'+tweet.text+'</li>');
     });
+    $('.tweet a').attr('target', '_blank');
   }
 
   //ADD INFO WINDOW
