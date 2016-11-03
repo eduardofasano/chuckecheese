@@ -13,21 +13,21 @@ $(() => {
   });
 
   let colorPalette =
-    {
-    "Drought": "#88b086",
-    "Dust And Haze": "#e9dab1",
-    "Wildfires": "#d25566",
-    "Floods": "#79b4e5",
-    "Severe Storms": "#a4dddc",
-    "Volcanoes": "#e3a744",
-    "Water Color": "#bbe2b8",
-    "Landslides": "#f1c7d9",
-    "Sea Lake Ice": "#d686d8",
-    "Earthquakes": "#d5bae5",
-    "Snow": "#d98f91",
-    "Temperature Extremes": "#f3f58c",
-    "Manmade": "#8a88e5"
-  };
+      {
+      "Drought": "#88b086",
+      "Dust And Haze": "#e9dab1",
+      "Wildfires": "#d25566",
+      "Floods": "#79b4e5",
+      "Severe Storms": "#a4dddc",
+      "Volcanoes": "#e3a744",
+      "Water Color": "#bbe2b8",
+      "Landslides": "#f1c7d9",
+      "Sea Lake Ice": "#d686d8",
+      "Earthquakes": "#d5bae5",
+      "Snow": "#d98f91",
+      "Temperature Extremes": "#f3f58c",
+      "Manmade": "#8a88e5"
+    };
 
   //CURRENT POSITION
   let currentPosition = navigator.geolocation.getCurrentPosition((position) => {
@@ -76,12 +76,11 @@ $(() => {
             map: map,
             radius: 500000,
             fillColor: colorPalette[category],
-             strokeWeight: 1,
-             strokeColor: colorPalette[category],
-             fillOpacity: 0.4,
+            strokeWeight: 1,
+            strokeColor: colorPalette[category],
+            fillOpacity: 0.4,
             category: disaster.categories[0].title
           });
-          console.log(colorPalette[category]);
           circles.push(circle);
           addInfoWindowForDisaster(disaster, circle);
         } else {
@@ -92,12 +91,14 @@ $(() => {
             fillColor: colorPalette[category],
             strokeWeight: 1,
             strokeColor: colorPalette[category],
+            fillOpacity: 0.4,
             category: disaster.categories[0].title
           });
           circles.push(circle);
           addInfoWindowForDisaster(disaster, circle);
         }
       });
+      setBoxStatus();
     });
   }
 
@@ -189,19 +190,19 @@ $(() => {
       $sidebar.html(`
         <ul class="checkbox-grid">
           <form class="filter" action="#" method="get">
-          <li><label class="labelStyle" id="drought"><input type="checkbox" class="checkBox button" name="drought" value="Drought" checked="true">Drought</label></li>
-          <li><label class="labelStyle" id="dust"><input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze</label></li>
-          <li><label class="labelStyle" id="wildfires"><input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires</label></li>
-          <li><label class="labelStyle" id="floods"><input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods</label></li>
-          <li><label class="labelStyle" id="storms"><input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms</label></li>
-          <li><label class="labelStyle" id="volcanoes"><input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes</label></li>
-          <li><label class="labelStyle" id="water"><input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color</label></li>
-          <li><label class="labelStyle" id="slides"><input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides</label></li>
-          <li><label class="labelStyle" id="sea"><input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice</label></li>
-          <li><label class="labelStyle" id="earthquakes"><input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes</label></li>
-          <li><label class="labelStyle" id="snow"><input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow</label></li>
-          <li><label class="labelStyle" id="temp"><input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme</label></li>
-          <li><label class="labelStyle" id="man"><input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade</label></li>
+            <li><label class="labelStyle" id="drought"><input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought</label></li>
+            <li><label class="labelStyle" id="dust"><input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze</label></li>
+            <li><label class="labelStyle" id="wildfires"><input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires</label></li>
+            <li><label class="labelStyle" id="floods"><input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods</label></li>
+            <li><label class="labelStyle" id="storms"><input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms</label></li>
+            <li><label class="labelStyle" id="volcanoes"><input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes</label></li>
+            <li><label class="labelStyle" id="water"><input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color</label></li>
+            <li><label class="labelStyle" id="slides"><input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides</label></li>
+            <li><label class="labelStyle" id="sea"><input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice</label></li>
+            <li><label class="labelStyle" id="earthquakes"><input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes</label></li>
+            <li><label class="labelStyle" id="snow"><input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow</label></li>
+            <li><label class="labelStyle" id="temp"><input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme</label></li>
+            <li><label class="labelStyle" id="man"><input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade</label></li>
           </form>
         </ul>
         <button id="logOut">Log Out</button>
@@ -213,6 +214,23 @@ $(() => {
           getCheckedBoxes();
         });
       }
+
+      //INPUT BOX FUNCTIONALITY
+      function setBoxStatus () {
+        let inputs = $(".checkBox");
+        let categoriesOnBoard = [];
+        for(let i=0; i<inputs.length; i++) {
+          let category = circles[i].category;
+          if ((categoriesOnBoard.indexOf(category)) < 0) {
+            categoriesOnBoard.push(category);
+            console.log(categoriesOnBoard);
+          }
+          if ((categoriesOnBoard.indexOf(inputs[i].defaultValue)) < 0) {
+            inputs[i].setAttribute("disabled", true);
+            inputs[i].parentElement.className = "labelStyle clicked disabled";
+        }
+      }
+    }
 
       //TWITTER FUNCTIONALITY
       function showTwitterForm() {
