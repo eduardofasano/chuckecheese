@@ -9,15 +9,57 @@
 
 
 #logInForm {
-  padding-top: 120px;
+  padding-top: 3px;
+  width: 340px;
+  margin: auto;
+  position: relative;
 }
 
 #registerForm {
-  padding-top: 30px;
+  padding-top: 5px;
+  position: relative;
 }
 
-form {
-text-align: center;
+.dsquark {
+  padding-top: 50px;
+  font-family: 'Raleway', sans-serif;
+  font-weight: bold;
+  text-align: center;
+  font-size: 35px;
+}
+
+.strapline {
+  font-family: 'Raleway', sans-serif;
+  font-weight: lighter;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+
+.ourUsers {
+  font-family: 'Raleway', sans-serif;
+  font-weight: lighter;
+  position: fixed;
+
+}
+
+.powered {
+  font-family: 'Raleway', sans-serif;
+  font-weight: strong;
+  text-align: center;
+  font-size: 14px;
+  float: left;
+  display: block;
+  position: absolute;
+  margin-left: 28%;
+  padding-top: 20px;
+}
+
+#nasa {
+  height: 55px;
+  display: block;
+  position: absolute;
+  margin-left: 52%;
 }
 
 .checkbox-grid li {
@@ -25,33 +67,55 @@ text-align: center;
 
 }
 
-input.button {
-   width: 147px;
-   text-align: center;
-   margin: auto;
+input{
+  width: 340px;
+  height: 100px;
+  display: block;
+  text-align: center;
+  margin: auto;
+  font-family: 'Raleway', sans-serif;
+  font-weight: lighter;
+  font-size: 15px;
 }
 
 .logo {
   height: 80px;
   margin: auto;
+}
 
+form.login {
+  text-align: center;
 }
 
 .filter {
 text-align: center;
-padding-top: 70px;
-width: 360px;
+width: 340px;
+margin-top: -20px;
+}
+
+input.button {
+  display: block;
+  margin: auto;
+  background-color: rgba(230, 255, 230, 0.3);
+}
+
+div#registerForm {
+  width: 340px;
+  display: block;
+  margin: auto;
 }
 
 
 #logOut   {
-  margin-top: 20px;
+  margin-top: 5px;
 	text-align: center;
 	text-shadow: -1px -1px 0px rgba(255,255,255,0.3), 1px 1px 0px rgba(0,0,0,0.8);
 	color: #222;
 	opacity: 0.4;
   display: block;
-  margin: auto;
+  position: absolute;
+  border: none;
+  margin-left: 40%;
 }
 
 
@@ -73,16 +137,19 @@ input.checkBox {
 }
 
 .labelStyle {
+  height: 34px;
   border: 1px solid lightgrey;
   border-radius: 3px;
   cursor: pointer;
-
+  padding-top: 5px;
   margin-left: 20px;
-
-  color: grey;
+  color: #595959;
   font-family: 'Raleway', sans-serif;
-  font-weight: lighter;
+  margin-left: 30%;
+  width: 340px;
 }
+
+
 
 #drought {
   background-color: rgba(136, 176, 134, 0.3);

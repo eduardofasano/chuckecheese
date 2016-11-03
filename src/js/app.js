@@ -13,21 +13,21 @@ $(() => {
   });
 
   let colorPalette =
-      {
-      "Drought": "#88b086",
-      "Dust And Haze": "#e9dab1",
-      "Wildfires": "#d25566",
-      "Floods": "#79b4e5",
-      "Severe Storms": "#a4dddc",
-      "Volcanoes": "#e3a744",
-      "Water Color": "#bbe2b8",
-      "Landslides": "#f1c7d9",
-      "Sea Lake Ice": "#d686d8",
-      "Earthquakes": "#d5bae5",
-      "Snow": "#d98f91",
-      "Temperature Extremes": "#f3f58c",
-      "Manmade": "#8a88e5"
-    };
+  {
+    "Drought": "#88b086",
+    "Dust And Haze": "#e9dab1",
+    "Wildfires": "#d25566",
+    "Floods": "#79b4e5",
+    "Severe Storms": "#a4dddc",
+    "Volcanoes": "#e3a744",
+    "Water Color": "#bbe2b8",
+    "Landslides": "#f1c7d9",
+    "Sea Lake Ice": "#d686d8",
+    "Earthquakes": "#d5bae5",
+    "Snow": "#d98f91",
+    "Temperature Extremes": "#f3f58c",
+    "Manmade": "#8a88e5"
+  };
 
   //CURRENT POSITION
   let currentPosition = navigator.geolocation.getCurrentPosition((position) => {
@@ -117,251 +117,263 @@ $(() => {
   function showLoginForm() {
     if (event) event.preventDefault();
     $sidebar.html(`
-      <div class="formDiv">
+    <div class="formDiv">
+      <h1 class="dsquark">DISASTER SQUAWK</h1>
+      <p class="strapline">Learn about the worlds disasters in real time.</p>
+
       <div id="logInForm">
-      <form class="login" action="api/login" method="post">
-      <label for="email"></label>
-      <input type="text" name="email" placeholder="email" value="">
-      <label for="password"></label>
-      <input type="password" name="password" placeholder="password" value=""><br>
-      <input type="submit" name="Log in" value="Log in" class='button'><br>
-      </form>
+      <p class="ourUsers">Log in...</p><br>
+        <form class="login" action="api/login" method="post">
+          <label for="email"></label>
+          <input type="text" name="email" placeholder="email" value="">
+          <label for="password"></label>
+          <input type="password" name="password" placeholder="password" value=""><br>
+          <input type="submit" name="Log in" value="Log in" class='button'><br>
+        </form>
       </div>
+
 
       <div id="registerForm">
-      <form class="register" action="api/register" method="post">
-      <label for="username"></label>
-      <input type="text" name="username" placeholder="username" value="">
-      <label for="email"></label>
-      <input type="text" name="email" placeholder="email" value="">
-      <label for="password"></label>
-      <input type="password" name="password" placeholder="password" value="">
-      <label for="passwordConfirmation"></label>
-      <input type="password" name="passwordConfirmation" placeholder="password confirmation" value=""><br>
-      <input type="submit" name="register" value="Register" class='button'><br>
+      <p class="ourUsers">New users...</p><br>
+        <form class="register" action="api/register" method="post">
+          <label for="username"></label>
+          <input type="text" name="username" placeholder="username" value="">
+          <label for="email"></label>
+          <input type="text" name="email" placeholder="email" value="">
+          <label for="password"></label>
+          <input type="password" name="password" placeholder="password" value="">
+          <label for="passwordConfirmation"></label>
+          <input type="password" name="passwordConfirmation" placeholder="password confirmation" value=""><br>
+          <input type="submit" name="register" value="Register" class='button'><br><br>
+          <p class="powered">Powered by</p><img src="images/nasa.png" id="nasa">
+        </form>
+      </div>
+
+    </div>
+    `);
+  }
+
+  //HANDLE-FORM
+  $container.on('submit', 'form', handleForm);
+  function handleForm() {
+    if(event) event.preventDefault();
+    let token = localStorage.getItem('token');
+    let $form = $(this);
+
+    let url = $form.attr('action');
+    let method = $form.attr('method');
+    let data = $form.serialize();
+
+    //LOGGING IN & REGISTRATION
+    $.ajax({
+      url,
+      method,
+      data,
+      beforeSend: function(jqXHR) {
+        if(token) return jqXHR.setRequestHeader('Authorization', `Bearer ${token}`);
+      }
+    }).done((data) => {
+      if(data.token) localStorage.setItem("token", data.token);
+      console.log('hello');
+      showFilterForm();
+      populateMap();
+    });
+  }
+
+  //LOGOUT
+  $container.on('click', '#logOut', logout);
+  function logout() {
+    if(event) event.preventDefault();
+    localStorage.removeItem('token');
+    showLoginForm();
+    circles.forEach((circle) => {
+      circle.setMap(null);
+    });
+    circles = [];
+  }
+
+  //CREATE FILTER FORM
+  function showFilterForm() {
+    if (event) event.preventDefault();
+    $sidebar.html(`
+
+    <ul class="checkbox-grid">
+    <h1 class="dsquark">DISASTER SQUAWK</h1>
+    <p class="strapline">Filter by available category...</p>
+      <form class="filter" action="#" method="get">
+        <li><label class="labelStyle" id="drought"><input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought</label></li>
+        <li><label class="labelStyle" id="dust"><input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze</label></li>
+        <li><label class="labelStyle" id="wildfires"><input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires</label></li>
+        <li><label class="labelStyle" id="floods"><input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods</label></li>
+        <li><label class="labelStyle" id="storms"><input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms</label></li>
+        <li><label class="labelStyle" id="volcanoes"><input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes</label></li>
+        <li><label class="labelStyle" id="water"><input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color</label></li>
+        <li><label class="labelStyle" id="slides"><input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides</label></li>
+        <li><label class="labelStyle" id="sea"><input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice</label></li>
+        <li><label class="labelStyle" id="earthquakes"><input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes</label></li>
+        <li><label class="labelStyle" id="snow"><input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow</label></li>
+        <li><label class="labelStyle" id="temp"><input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme</label></li>
+        <li><label class="labelStyle" id="man"><input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade</label></li>
       </form>
-      </div>
-      </div>
-      `);
-    }
+      <button id="logOut">Log Out</button>
+    </ul>
 
-    //HANDLE-FORM
-    $container.on('submit', 'form', handleForm);
-    function handleForm() {
-      if(event) event.preventDefault();
-      let token = localStorage.getItem('token');
-      let $form = $(this);
+    `);
+    $("input").on("click", function () {
+      $(this).parent().toggleClass('clicked');
+      let inputValue = this.value;
+      console.log(inputValue);
+      getCheckedBoxes();
+    });
+  }
 
-      let url = $form.attr('action');
-      let method = $form.attr('method');
-      let data = $form.serialize();
-
-      //LOGGING IN & REGISTRATION
-      $.ajax({
-        url,
-        method,
-        data,
-        beforeSend: function(jqXHR) {
-          if(token) return jqXHR.setRequestHeader('Authorization', `Bearer ${token}`);
-        }
-      }).done((data) => {
-        if(data.token) localStorage.setItem("token", data.token);
-        console.log('hello');
-        showFilterForm();
-        populateMap();
-      });
-    }
-
-    //LOGOUT
-    $container.on('click', '#logOut', logout);
-    function logout() {
-      if(event) event.preventDefault();
-      localStorage.removeItem('token');
-      showLoginForm();
-      circles.forEach((circle) => {
-        circle.setMap(null);
-      });
-      circles = [];
-    }
-
-    //CREATE FILTER FORM
-    function showFilterForm() {
-      if (event) event.preventDefault();
-      $sidebar.html(`
-        <ul class="checkbox-grid">
-          <form class="filter" action="#" method="get">
-            <li><label class="labelStyle" id="drought"><input type="checkbox" class="checkBox" name="drought" value="Drought" checked="true">Drought</label></li>
-            <li><label class="labelStyle" id="dust"><input type="checkbox" class="checkBox" name="dustAndHaze" value="Dust and Haze" checked="true">Dust and Haze</label></li>
-            <li><label class="labelStyle" id="wildfires"><input type="checkbox" class="checkBox" name="wildfires" value="Wildfires" checked="true">Wildfires</label></li>
-            <li><label class="labelStyle" id="floods"><input type="checkbox" class="checkBox" name="floods" value="Floods" checked="true">Floods</label></li>
-            <li><label class="labelStyle" id="storms"><input type="checkbox" class="checkBox" name="severeStorms" value="Severe Storms" checked="true">Severe Storms</label></li>
-            <li><label class="labelStyle" id="volcanoes"><input type="checkbox" class="checkBox" name="volcanoes" value="Volcanoes" checked="true">Volcanoes</label></li>
-            <li><label class="labelStyle" id="water"><input type="checkbox" class="checkBox" name="waterColor" value="Water Color" checked="true">Water Color</label></li>
-            <li><label class="labelStyle" id="slides"><input type="checkbox" class="checkBox" name="landslides" value="Landslides" checked="true">Landslides</label></li>
-            <li><label class="labelStyle" id="sea"><input type="checkbox" class="checkBox" name="seaLakeIce" value="Sea Lake Ice" checked="true">Sea Lake Ice</label></li>
-            <li><label class="labelStyle" id="earthquakes"><input type="checkbox" class="checkBox" name="earthquakes" value="Earthquakes" checked="true">Earthquakes</label></li>
-            <li><label class="labelStyle" id="snow"><input type="checkbox" class="checkBox" name="snow" value="Snow" checked="true">Snow</label></li>
-            <li><label class="labelStyle" id="temp"><input type="checkbox" class="checkBox" name="temperatureExtreme" value="Temperature Extremes" checked="true">Temperature Extreme</label></li>
-            <li><label class="labelStyle" id="man"><input type="checkbox" class="checkBox" name="manMade" value="Manmade" checked="true">Manmade</label></li>
-          </form>
-        </ul>
-        <button id="logOut">Log Out</button>
-        `);
-        $("input").on("click", function () {
-          $(this).parent().toggleClass('clicked');
-          let inputValue = this.value;
-          console.log(inputValue);
-          getCheckedBoxes();
-        });
+  //INPUT BOX FUNCTIONALITY
+  function setBoxStatus () {
+    let inputs = $(".checkBox");
+    let categoriesOnBoard = [];
+    for(let i=0; i<inputs.length; i++) {
+      let category = circles[i].category;
+      if ((categoriesOnBoard.indexOf(category)) < 0) {
+        categoriesOnBoard.push(category);
+        console.log(categoriesOnBoard);
       }
-
-      //INPUT BOX FUNCTIONALITY
-      function setBoxStatus () {
-        let inputs = $(".checkBox");
-        let categoriesOnBoard = [];
-        for(let i=0; i<inputs.length; i++) {
-          let category = circles[i].category;
-          if ((categoriesOnBoard.indexOf(category)) < 0) {
-            categoriesOnBoard.push(category);
-            console.log(categoriesOnBoard);
-          }
-          if ((categoriesOnBoard.indexOf(inputs[i].defaultValue)) < 0) {
-            inputs[i].setAttribute("disabled", true);
-            inputs[i].parentElement.className = "labelStyle clicked disabled";
-        }
+      if ((categoriesOnBoard.indexOf(inputs[i].defaultValue)) < 0) {
+        inputs[i].setAttribute("disabled", true);
+        inputs[i].parentElement.className = "labelStyle clicked disabled";
       }
     }
+  }
 
-      //TWITTER FUNCTIONALITY
-      function showTwitterForm() {
-        if(event) event.preventDefault();
-        $sidebar.html(`
+  //TWITTER FUNCTIONALITY
+  function showTwitterForm() {
+    if(event) event.preventDefault();
+    $sidebar.html(`
 
-          <div class="tweetStream">Tweets Div
-          <ul class="tweetItems">
-          </ul>
-          </div>
-          `);
-        }
+    <div class="tweetStream">Tweets Div
+      <ul class="tweetItems">
+      </ul>
+    </div>
+    `);
+  }
 
-        let $tweetStream = $('.tweetStream');
+  let $tweetStream = $('.tweetStream');
 
-      function getTweets(title) {
-        title = title.split(",")[0];
-        console.log(title);
-        let tweets = $.get(`http://localhost:8000/api/tweets?q=${title}`)
-        .done(function(data) {
-          console.log(data);
-          let $tweetItems = $('.tweetItems');
-          data.statuses.forEach((tweet) => {
-            console.log(tweet.text);
-            let itemHtml =
-              '<li class="stream-item">'+
-                '<div class="tweet">'+
-                  '<div id="image">'+
-                    '<img src="'+ tweet.user.profile_image_url +'" alt="User image goes here.">' +
+  function getTweets(title) {
+    title = title.split(",")[0];
+    console.log(title);
+    let tweets = $.get(`http://localhost:8000/api/tweets?q=${title}`)
+    .done(function(data) {
+      console.log(data);
+      let $tweetItems = $('.tweetItems');
+      data.statuses.forEach((tweet) => {
+        console.log(tweet.text);
+        let itemHtml =
+        '<li class="stream-item">'+
+          '<div class="tweet">'+
+            '<div id="image">'+
+              '<img src="'+ tweet.user.profile_image_url +'" alt="User image goes here.">' +
+              '</div>' +
+              '<div class="content">' +
+                '<strong class="fullname">'+ tweet.user.name +'</strong>' +
+                '<span>&rlm;</span>' +
+                '<span>@</span><b>' + tweet.user.screen_name + '</b>' +
+                '&nbsp;&middot;&nbsp;' +
+                '<small>' +
+                  tweet.created_at +
+                  '</small>' +
+                  '<p>' + tweet.text +'</p>' +
                   '</div>' +
-                  '<div class="content">' +
-                    '<strong class="fullname">'+ tweet.user.name +'</strong>' +
-                    '<span>&rlm;</span>' +
-                    '<span>@</span><b>' + tweet.user.screen_name + '</b>' +
-                    '&nbsp;&middot;&nbsp;' +
-                    '<small>' +
-                      tweet.created_at +
-                    '</small>' +
-                    '<p>' + tweet.text +'</p>' +
                   '</div>' +
-                '</div>' +
-              '</li>'
-              ;
-              $tweetItems.append(itemHtml);
+                  '</li>'
+                  ;
+                  $tweetItems.append(itemHtml);
 
-              // '<li>'+tweet.text+'</li>');
-            });
-          });
-        }
-
-        //ADD INFO WINDOW
-        function addInfoWindowForDisaster(disaster, circle) {
-          google.maps.event.addListener(circle, "click", () => {
-            getTweets(disaster.title);
-            console.log(circle.category);
-            console.log(disaster);
-            let date = new Date(disaster.geometries[0].date).toLocaleDateString("en-GB");
-            infoWindow = new google.maps.InfoWindow({
-              content: `
-              <div class="infoWindow">
-              <h2>${disaster.title}</h2>
-              <h5>${date}</h5>
-              <a class="button" href="${disaster.sources[0].url}" target="_blank">More Information</a>
-              <button id="goBack">Go Back</button>
-              </div>
-              `,
-              position: circle.center,
-            });
-            map.setCenter(circle.center);
-            map.panTo(circle.center);
-            smoothZoomIn(map, 8, map.getZoom());
-            circles.forEach((circle) => {
-              circle.setMap(null);
-            });
-            circles = [];
-            setTimeout(() =>{
-              infoWindow.open(map, circle);
-            }, 1500);
-            showTwitterForm();
-          });
-        }
-
-        //FILTERING FUNCTIONALITY
-        function getCheckedBoxes () {
-          console.log("change");
-          let checkBoxes = $(".checkBox");
-          checkBoxesChecked = [];
-          for (var i=0; i<checkBoxes.length; i++) {
-            if (checkBoxes[i].checked) {
-              checkBoxesChecked.push(checkBoxes[i].defaultValue);
+                  // '<li>'+tweet.text+'</li>');
+                });
+              });
             }
-          }
-          console.log(checkBoxesChecked);
-          filterCategories();
-        }
 
-        function filterCategories () {
-          for(var i=0; i<circles.length; i++) {
-            if((checkBoxesChecked.indexOf(circles[i].category)) > -1) {
-              circles[i].setVisible(true);
-            } else {
-              circles[i].setVisible(false);
+            //ADD INFO WINDOW
+            function addInfoWindowForDisaster(disaster, circle) {
+              google.maps.event.addListener(circle, "click", () => {
+                getTweets(disaster.title);
+                console.log(circle.category);
+                console.log(disaster);
+                let date = new Date(disaster.geometries[0].date).toLocaleDateString("en-GB");
+                infoWindow = new google.maps.InfoWindow({
+                  content: `
+                  <div class="infoWindow">
+                    <h2>${disaster.title}</h2>
+                    <h5>${date}</h5>
+                    <a class="button" href="${disaster.sources[0].url}" target="_blank">More Information</a>
+                    <button id="goBack">Go Back</button>
+                  </div>
+                  `,
+                  position: circle.center,
+                });
+                map.setCenter(circle.center);
+                map.panTo(circle.center);
+                smoothZoomIn(map, 8, map.getZoom());
+                circles.forEach((circle) => {
+                  circle.setMap(null);
+                });
+                circles = [];
+                setTimeout(() =>{
+                  infoWindow.open(map, circle);
+                }, 1500);
+                showTwitterForm();
+              });
             }
-          }
-        }
 
-      //ZOOM-FUNCTIONS
-      //http://stackoverflow.com/questions/4752340/how-to-zoom-in-smoothly-on-a-marker-in-google-maps
-      function smoothZoomIn (map, max, cnt) {
-        if (cnt >= max) {
-          return;
-        }
-        else {
-          let z = google.maps.event.addListener(map, 'zoom_changed', function(event){
-            google.maps.event.removeListener(z);
-            smoothZoomIn(map, max, cnt + 1);
-          });
-          setTimeout(function(){ map.setZoom(cnt); }, 150);
-        }
-      }
+            //FILTERING FUNCTIONALITY
+            function getCheckedBoxes () {
+              console.log("change");
+              let checkBoxes = $(".checkBox");
+              checkBoxesChecked = [];
+              for (var i=0; i<checkBoxes.length; i++) {
+                if (checkBoxes[i].checked) {
+                  checkBoxesChecked.push(checkBoxes[i].defaultValue);
+                }
+              }
+              console.log(checkBoxesChecked);
+              filterCategories();
+            }
 
-      function smoothZoomOut (map, min, cnt) {
-        if (cnt <= min) {
-          return;
-        }
-        else {
-          let z = google.maps.event.addListener(map, 'zoom_changed', function(event){
-            google.maps.event.removeListener(z);
-            smoothZoomOut(map, min, cnt - 1);
+            function filterCategories () {
+              for(var i=0; i<circles.length; i++) {
+                if((checkBoxesChecked.indexOf(circles[i].category)) > -1) {
+                  circles[i].setVisible(true);
+                } else {
+                  circles[i].setVisible(false);
+                }
+              }
+            }
+
+            //ZOOM-FUNCTIONS
+            //http://stackoverflow.com/questions/4752340/how-to-zoom-in-smoothly-on-a-marker-in-google-maps
+            function smoothZoomIn (map, max, cnt) {
+              if (cnt >= max) {
+                return;
+              }
+              else {
+                let z = google.maps.event.addListener(map, 'zoom_changed', function(event){
+                  google.maps.event.removeListener(z);
+                  smoothZoomIn(map, max, cnt + 1);
+                });
+                setTimeout(function(){ map.setZoom(cnt); }, 150);
+              }
+            }
+
+            function smoothZoomOut (map, min, cnt) {
+              if (cnt <= min) {
+                return;
+              }
+              else {
+                let z = google.maps.event.addListener(map, 'zoom_changed', function(event){
+                  google.maps.event.removeListener(z);
+                  smoothZoomOut(map, min, cnt - 1);
+                });
+                setTimeout(function(){ map.setZoom(cnt); }, 150);
+              }
+            }
           });
-          setTimeout(function(){ map.setZoom(cnt); }, 150);
-        }
-      }
-});
