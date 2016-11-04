@@ -16,31 +16,40 @@
 }
 
 #registerForm {
+  height: 280px;
+  width: 340px;
+  display: block;
+  margin: auto;
   padding-top: 5px;
   position: relative;
 }
 
 .dsquark {
-  padding-top: 30px;
+  padding-top: 15px;
   font-family: 'Raleway', sans-serif;
   font-weight: bold;
   text-align: center;
   font-size: 35px;
   margin-bottom: 10px;
+  padding-bottom: 0px;
 }
 
 .strapline {
   font-family: 'Raleway', sans-serif;
   font-weight: lighter;
+  font-size: 100%;
   text-align: center;
-  margin-bottom: 30px;
+  padding-top: 10px;
+  margin-bottom: 10px;
 }
 
 
 .ourUsers {
   font-family: 'Raleway', sans-serif;
   font-weight: lighter;
-  position: fixed;
+  margin-bottom:-25px;
+  margin-top:10px;
+  padding: 0px;
 
 }
 
@@ -60,7 +69,7 @@
   height: 55px;
   display: block;
   position: absolute;
-  margin-left: 52%;
+  margin-left: 52%
 }
 
 form {
@@ -76,7 +85,7 @@ input {
   width: 340px;
   height: 100px;
   display: block;
-  text-align: center;
+  text-align: left;
   margin: auto;
   font-family: 'Raleway', sans-serif;
   font-weight: lighter;
@@ -90,6 +99,13 @@ input {
 
 form.login {
   text-align: center;
+  margin-bottom: 0px;
+}
+
+form.register {
+  height: 230px;
+  text-align: center;
+  margin-bottom: 0px;
 }
 
 .filter {
@@ -104,11 +120,11 @@ input.button {
   background-color: rgba(230, 255, 230, 0.3);
 }
 
-div#registerForm {
+/*div#registerForm {
   width: 340px;
   display: block;
   margin: auto;
-}
+}*/
 
 
 #logOut   {
@@ -119,8 +135,9 @@ div#registerForm {
 	opacity: 0.4;
   display: block;
   border: none;
-  width: 340px;
+  max-width: 340px;
   margin: auto;
+  height: 10px;
 }
 
 
@@ -142,11 +159,11 @@ input.checkBox {
 }
 
 .labelStyle {
-  height: 34px;
+  height: 32px;
   border: 1px solid lightgrey;
   border-radius: 3px;
   cursor: pointer;
-  padding-top: 5px;
+  padding-top: 3px;
   font-family: 'Raleway', sans-serif;
   width: 100%;
 }
