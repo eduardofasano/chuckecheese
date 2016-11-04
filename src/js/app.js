@@ -124,7 +124,7 @@ $(() => {
     $sidebar.html(`
     <div class="formDiv">
       <h1 class="dsquark">DISASTER SQUAWK</h1>
-      <p class="strapline">Learn about the worlds disasters in real time.</p>
+      <p class="strapline">Learn about the worlds disasters in real time</p>
 
       <div id="logInForm">
       <p class="ourUsers">Log in...</p><br>
