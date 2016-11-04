@@ -149,7 +149,7 @@ $(() => {
           <input type="password" name="password" placeholder="password" value="">
           <label for="passwordConfirmation"></label>
           <input type="password" name="passwordConfirmation" placeholder="password confirmation" value=""><br>
-          <input type="submit" name="register" value="Register" class='button'><br><br>
+          <input type="submit" name="register" value="Register" class='button'><br>
           <p class="powered">Powered by</p><img src="images/nasa.png" id="nasa">
         </form>
       </div>
