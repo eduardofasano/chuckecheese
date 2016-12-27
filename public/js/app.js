@@ -67,7 +67,7 @@ $(function () {
 
   //POPULATE MAP
   function populateMap() {
-    var getEvents = $.get('https://eonet.sci.gsfc.nasa.gov/api/v2/events').done(function (data) {
+    var getEvents = $.getJSON('https://eonet.sci.gsfc.nasa.gov/api/v2.1/events', { status: 'open', limit: 30 }).done(function (data) {
       data.events.forEach(function (disaster) {
         var category = disaster.categories[0].title;
         if (disaster.geometries[0].coordinates[0] instanceof Array) {

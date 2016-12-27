@@ -65,7 +65,7 @@ $(() => {
 
   //POPULATE MAP
   function populateMap() {
-    let getEvents = $.get('https://eonet.sci.gsfc.nasa.gov/api/v2/events')
+    let getEvents = $.getJSON('https://eonet.sci.gsfc.nasa.gov/api/v2.1/events', { status: 'open', limit: 30 })
       .done(function(data) {
       data.events.forEach((disaster) => {
         let category = disaster.categories[0].title;
